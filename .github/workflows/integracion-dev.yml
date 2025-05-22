@@ -50,6 +50,7 @@ jobs: # <-- Esta es la línea 74, asegúrate de que no tenga espacios delante y 
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ github.run_id }} # <-- ¡Así!
           path: playwright-report/
           retention-days: 5
+  
