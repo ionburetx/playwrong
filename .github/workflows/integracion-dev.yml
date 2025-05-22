@@ -1,29 +1,120 @@
 # .github/workflows/integracion-dev.yml
 
-name: Integración y Novedades en DEV
+name: CI - Integración en Dev # Nombre visible del workflow en GitHub Actions
 
+# Define cuándo se ejecutará este workflow
 on:
+  # Se ejecuta en cada 'push' a la rama 'dev'
   push:
     branches:
-      - dev # Esta automatización se activa solo cuando hay un 'push' a la rama 'dev'
+      - dev
 
+# Define los trabajos (jobs) que se ejecutarán en este workflow
 jobs:
-  notificar_equipo:
+  # Job para construir la aplicación y ejecutar las pruebas de frontend
+  build_and_test_frontend:
+    # El trabajo se ejecutará en un runner de Ubuntu (máquina virtual)
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout del código
-        uses: actions/checkout@v4 # Clona el repositorio para acceder a la info del commit
 
-      - name: Mensaje de Integración DEV
-        run: |
-          echo "==================================================="
-          echo "¡Hola, equipo de desarrolladores!"
-          echo "Se ha integrado un nuevo cambio en la rama 'dev'."
-          echo "Esto acerca nuestro proyecto al próximo lanzamiento."
-          echo "---------------------------------------------------"
-          echo "Autor del cambio: ${{ github.actor }}"
-          echo "Commit ID: ${{ github.sha }}"
-          echo "Mensaje del commit: ${{ github.event.head_commit.message }}"
-          echo "---------------------------------------------------"
-          echo "¡Recuerden probar los cambios y mantenerse sincronizados!"
-          echo "==================================================="
+    # Configura una estrategia de matriz para ejecutar el trabajo con diferentes versiones de Node.js
+    strategy:
+      matrix:
+        node-version: [ '18', '20' ] # Prueba con Node.js 18 y 20
+
+    # Define los pasos que se ejecutarán dentro del job 'build_and_test_frontend'
+    steps:
+      # Paso 1: Hacer un checkout del código del repositorio
+      - name: Checkout del Repositorio
+        uses: actions/checkout@v4 # Usa la acción oficial para clonar el repositorio
+
+      # Paso 2: Configurar el entorno de Node.js
+      - name: Configurar Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4 # Usa la acción oficial para configurar Node.js
+        with:
+          node-version: ${{ matrix.node-version }} # Usa la versión de Node.js de la matriz
+          cache: 'npm' # Habilita el caché de npm para acelerar la instalación de dependencias
+
+      # Paso 3: Instalar todas las dependencias del proyecto (incluido React, Vite, Playwright)
+      - name: Instalar Dependencias del Proyecto
+        run: npm install
+
+      # Paso 4: Instalar los navegadores necesarios para Playwright
+      - name: Instalar Navegadores de Playwright
+        # Instala Chromium, Firefox y WebKit. Asegúrate de que esto coincida con 'projects' en playwright.config.js
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      # Paso 5: Construir la aplicación React con Vite
+      # Esto genera los archivos estáticos de producción en la carpeta 'dist/'
+      - name: Construir Aplicación React (Vite)
+        run: npm run build
+
+      # Paso 6: Servir la aplicación React compilada para que Playwright pueda interactuar con ella
+      # 'npx serve -l 5173 dist' inicia un servidor para la carpeta 'dist' en el puerto 5173
+      # '&' ejecuta el comando en segundo plano
+      # 'npx wait-on http://localhost:5173' espera hasta que la URL esté accesible
+      - name: Servir Aplicación Compilada para Pruebas Playwright
+        run: npx serve -l 5173 dist & npx wait-on http://localhost:5173 -t 60000
+        working-directory: . # Asegura que el comando se ejecuta en la raíz del repositorio
+
+      # Paso 7: Ejecutar las pruebas de Playwright
+      - name: Ejecutar Pruebas Playwright
+        run: npx playwright test
+        env:
+          CI: true # Establece la variable de entorno CI (útil para Playwright)
+
+      # Paso 8: Subir el reporte HTML de Playwright como un artefacto
+      # Se ejecuta siempre (incluso si los tests fallan) para poder revisar los resultados
+      - name: Subir Reporte de Pruebas Playwright
+        if: always()
+        uses: actions/upload-artifact@v4 # Usa la acción oficial para subir artefactos
+        with:
+          name: playwright-report # Nombre del artefacto
+          path: playwright-report/ # Ruta donde Playwright guarda el reporte por defecto
+          retention-days: 5 # Cuántos días se conservará el artefacto
+    ```
+
+---
+
+### 3. **Guarda y Haz Commit del Workflow en GitHub**
+
+1.  Haz clic en el botón verde **"Commit changes..."** en la esquina superior derecha del editor de GitHub.
+2.  Añade un mensaje de commit claro, por ejemplo: `feat: Add CI workflow for 'dev' branch (push only)`.
+3.  Asegúrate de que la opción para hacer commit a tu rama principal (probablemente `main` o `master`) esté seleccionada. **Esto guardará el archivo de workflow en tu repositorio.**
+
+---
+
+### 4. **Asegúrate de que tu Proyecto Local esté Sincronizado**
+
+Para que el workflow funcione con tu código más reciente, es crucial que todos los archivos necesarios (`playwright.config.js` con la `baseURL` correcta, la carpeta `tests/`, etc.) estén presentes en la rama `dev` de tu repositorio remoto.
+
+1.  Abre tu terminal en la raíz de tu proyecto local.
+2.  **Añade todos los cambios locales al stage:**
+    ```bash
+    git add .
+    ```
+3.  **Realiza un commit local (si tienes cambios pendientes):**
+    ```bash
+    git commit -m "feat: Prepare project for CI, ensure Playwright config is pushed"
+    ```
+4.  **Sube tus commits a la rama `dev` de GitHub:**
+    Este es el paso clave para activar la CI. Si no estás en la rama `dev`, primero cámbiate:
+    ```bash
+    git checkout dev # Si no estás ya en la rama 'dev'
+    git pull origin dev # Para asegurar que tienes lo último de la rama 'dev' antes de empujar tus cambios
+    git push origin dev
+    ```
+
+---
+
+### 5. **Observa la Ejecución del Workflow**
+
+Una vez que hayas ejecutado el `git push origin dev`, GitHub detectará la actividad en la rama `dev` y activará tu workflow:
+
+1.  Ve a la pestaña **"Actions"** en tu repositorio de GitHub.
+2.  Deberías ver un nuevo workflow en ejecución (o que ya ha terminado) con el nombre **"CI - Integración en Dev"**.
+3.  Haz clic en él para ver los detalles, el job `build_and_test_frontend`, y los logs de cada paso.
+4.  Verás cómo se instalan dependencias, se construye la aplicación, se inicia el servidor y se ejecutan tus pruebas. Los checks verdes indicarán éxito, y los rojos, fallos. Podrás descargar el "playwright-report" para depurar cualquier problema en las pruebas.
+
+---
+
+Ahora, cada vez que tú o tus compañeros hagan un `git push` o un `merge` directo a la rama `dev`, el workflow de GitHub Actions se activará automáticamente, construirá la aplicación y ejecutará todas tus pruebas Playwright. ¡Esto asegurará que la rama `dev` se mantenga estable y funcional!
