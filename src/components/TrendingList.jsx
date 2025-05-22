@@ -15,7 +15,7 @@ const TrendingList = () => {
         const response = await axios.get(
           `https://api.themoviedb.org/3/trending/movie/day?api_key=${import.meta.env.VITE_TMDB_API_KEY}`
         );
-        setMovies(response.data.results.slice(0, 3));
+        setMovies(response.data.results);
         setLoading(false);
       } catch (err) {
         setError(err.message);
