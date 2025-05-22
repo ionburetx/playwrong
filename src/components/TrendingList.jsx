@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import MovieCard from './MovieCard';
+import MovieCardTrending from './MovieCardTrending';
 import Loading from './Loading.jsx';
 import Error from './Error';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, EffectFade, Autoplay } from 'swiper/modules';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/effect-fade';
 
 const TrendingList = () => {
   const [movies, setMovies] = useState([]);
@@ -30,17 +36,31 @@ const TrendingList = () => {
   if (error) return <Error message={error} />;
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h2 className="text-3xl font-bold text-gray-900 mb-8">Trending Today</h2>
-      <div className="grid grid-cols-1 gap-8">
+    <section className="w-full h-[calc(100vh-72px)] relative overflow-hidden">
+      <h1 className="absolute top-8 left-8 text-6xl font-bold text-white z-10 tracking-wider">
+        TRENDING
+      </h1>
+      <Swiper
+        modules={[Navigation, EffectFade, Autoplay]}
+        effect="fade"
+        navigation
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
+        speed={800}
+        loop={true}
+        className="w-full h-full"
+      >
         {movies.map((movie) => (
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            isTrending={true}
-          />
+          <SwiperSlide key={movie.id}>
+            <MovieCardTrending
+              movie={movie}
+              isTrending={true}
+            />
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
     </section>
   );
 };
