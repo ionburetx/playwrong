@@ -1,0 +1,393 @@
+[
+    {
+      "adult": false,
+      "backdrop_path": "/gsQJOfeW45KLiQeEIsom94QPQwb.jpg",
+      "genre_ids": [
+        28,
+        53
+      ],
+      "id": 1125899,
+      "original_language": "en",
+      "original_title": "Prueba",
+      "overview": "Cuando un grupo de activistas radicales se apodera de la gala anual de una empresa energética y toma 300 rehenes, una ex soldado convertida en limpiacristales suspendida 50 pisos en el exterior del edificio debe salvar a los que están atrapados dentro, incluido su hermano pequeño.",
+      "popularity": 482.4115,
+      "poster_path": "/2KIqFpvjVI6mNBTQw7MYZdzRYvs.jpg",
+      "release_date": "2025-02-19",
+      "title": "Prueba",
+      "video": false,
+      "vote_average": 6.7,
+      "vote_count": 120
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/m2mzlsJjE3UAqeUB5fLUkpWg4Iq.jpg",
+      "genre_ids": [
+        53,
+        878
+      ],
+      "id": 1165067,
+      "original_language": "en",
+      "original_title": "Cosmic Chaos",
+      "overview": "Batallas en realidad virtual, supervivencia en un páramo postapocalíptico, una nave espacial soviética que emite una señal de socorro... Historias fantásticas creadas con avanzados efectos especiales y pasión.",
+      "popularity": 416.3711,
+      "poster_path": "/mClzWv7gBqgXfjZXp49Enyoex1v.jpg",
+      "release_date": "2023-08-03",
+      "title": "Relatos Fantásticos",
+      "video": false,
+      "vote_average": 5.735,
+      "vote_count": 17
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/8eifdha9GQeZAkexgtD45546XKx.jpg",
+      "genre_ids": [
+        28,
+        53,
+        878
+      ],
+      "id": 822119,
+      "original_language": "en",
+      "original_title": "Captain America: Brave New World",
+      "overview": "Tras reunirse con el recién elegido presidente de los EE. UU., Thaddeus Ross, Sam se encuentra en medio de un incidente internacional. Debe descubrir el motivo que se esconde tras un perverso complot global, antes de que su verdadero artífice enfurezca al mundo entero.",
+      "popularity": 391.167,
+      "poster_path": "/im71UJzBqY03swuGYVR28j0JFM2.jpg",
+      "release_date": "2025-02-12",
+      "title": "Capitán América: Brave New World",
+      "video": false,
+      "vote_average": 6.084,
+      "vote_count": 1157
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/ibF5XVxTzf1ayzZrmiJqgeQ39Qk.jpg",
+      "genre_ids": [
+        28,
+        10752
+      ],
+      "id": 1373723,
+      "original_language": "en",
+      "original_title": "The Codes of War",
+      "overview": "Las historias de guerra sobre la familia, la ética y el honor incluyen la historia real de dos marines estadounidenses que, en un lapso de seis segundos, deben mantenerse firmes para detener un camión bomba suicida, un soldado de la Marina que intenta aferrarse a su humanidad y un soldado de la Segunda Guerra Mundial que se separa de su escuadrón y se ve obligado a reevaluar su código.",
+      "popularity": 360.0093,
+      "poster_path": "/oXeiQAfRK90pxxhP5iKPXQqAIN1.jpg",
+      "release_date": "2025-03-20",
+      "title": "Códigos de Guerra",
+      "video": false,
+      "vote_average": 6.8,
+      "vote_count": 13
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/is9bmV6uYXu7LjZGJczxrjJDlv8.jpg",
+      "genre_ids": [
+        28,
+        12
+      ],
+      "id": 1229730,
+      "original_language": "fr",
+      "original_title": "Carjackers",
+      "overview": "Por el día, son invisibles: aparcacoches, recepcionistas y camareros de un hotel de lujo. Por la noche, son criminales, una banda de conductores expertos que asalta a clientes ricos en sus coches. Justo cuando planean su último golpe, la directora del hotel contrata a un sicario despiadado para detenerlos. El peligro les acecha, ¿conseguirán Nora, Zoé, Steve y Prestance dar su mayor golpe?",
+      "popularity": 398.2681,
+      "poster_path": "/rpAbueORafYSgTk2oSc2t6ayktb.jpg",
+      "release_date": "2025-03-27",
+      "title": "Criminales de lujo",
+      "video": false,
+      "vote_average": 6.8,
+      "vote_count": 21
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/9OO6I25MHhCDd0XwNk4oZl0fpwB.jpg",
+      "genre_ids": [
+        28,
+        18
+      ],
+      "id": 1261050,
+      "original_language": "da",
+      "original_title": "De lydløse",
+      "overview": "En 2008, un grupo de hombres de Dinamarca y Europa lleva a cabo el mayor atraco de todos los tiempos en suelo danés. Kasper, un boxeador con pocas oportunidades en la vida, recibe la oferta de sus iniciadores extranjeros para planear el robo.",
+      "popularity": 347.7416,
+      "poster_path": "/ywHCbLbTremCJBiHRa63rlrXmWs.jpg",
+      "release_date": "2024-10-31",
+      "title": "Los silenciosos",
+      "video": false,
+      "vote_average": 4.8,
+      "vote_count": 9
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/6Pyo1Hsu7CexPK8jumTnqcs0q5e.jpg",
+      "genre_ids": [
+        28,
+        80,
+        53
+      ],
+      "id": 1197306,
+      "original_language": "en",
+      "original_title": "A Working Man",
+      "overview": "Levon Cade dejó atrás una condecorada carrera militar en las operaciones encubiertas para vivir una vida sencilla trabajando en la construcción. Pero cuando la hija de su jefe, que para él es como de la familia, es secuestrada por traficantes de personas, su búsqueda para traerla a casa descubre un mundo de corrupción mucho mayor de lo que jamás podría haber imaginado.",
+      "popularity": 309.5097,
+      "poster_path": "/aG50Ad3UV8cCQWpNWSHHUqgKGNB.jpg",
+      "release_date": "2025-03-26",
+      "title": "A Working Man",
+      "video": false,
+      "vote_average": 6.6,
+      "vote_count": 67
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/xkjWiRQtrenqGRWO2Enry2JIl4d.jpg",
+      "genre_ids": [
+        27
+      ],
+      "id": 1388366,
+      "original_language": "en",
+      "original_title": "Popeye the Slayer Man",
+      "overview": "",
+      "popularity": 244.9355,
+      "poster_path": "/nVwu3mN7hr1yF467pGct3yQFM41.jpg",
+      "release_date": "2025-03-21",
+      "title": "Popeye the Slayer Man",
+      "video": false,
+      "vote_average": 6.5,
+      "vote_count": 33
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/u7j9GwAzEuDmYikzhMDWC9kCAiG.jpg",
+      "genre_ids": [
+        10751,
+        14
+      ],
+      "id": 447273,
+      "original_language": "en",
+      "original_title": "Snow White",
+      "overview": "Una adaptación en vivo del clásico cuento de hadas sobre una hermosa joven princesa que, mientras es acosada por una reina celosa, busca refugio en la casa de siete enanos en la campiña alemana.",
+      "popularity": 234.9381,
+      "poster_path": "/dtoWK3K5e9b7gL9tKYMMavqcZxr.jpg",
+      "release_date": "2025-03-19",
+      "title": "Blancanieves",
+      "video": false,
+      "vote_average": 4.44,
+      "vote_count": 435
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/1w8kutrRucTd3wlYyu5QlUDMiG1.jpg",
+      "genre_ids": [
+        12,
+        10751,
+        16
+      ],
+      "id": 762509,
+      "original_language": "en",
+      "original_title": "Mufasa: The Lion King",
+      "overview": "Rafiki debe transmitir la leyenda de Mufasa a la joven cachorro de león Kiara, hija de Simba y Nala, y con Timón y Pumba prestando su estilo característico. Mufasa, un cachorro huérfano, perdido y solo, conoce a un simpático león llamado Taka, heredero de un linaje real. Este encuentro casual pone en marcha un viaje de un extraordinario grupo de inadaptados que buscan su destino.",
+      "popularity": 217.733,
+      "poster_path": "/dmw74cWIEKaEgl5Dv3kUTcCob6D.jpg",
+      "release_date": "2024-12-18",
+      "title": "Mufasa: El rey león",
+      "video": false,
+      "vote_average": 7.454,
+      "vote_count": 1812
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/zo8CIjJ2nfNOevqNajwMRO6Hwka.jpg",
+      "genre_ids": [
+        16,
+        12,
+        10751,
+        35
+      ],
+      "id": 1241982,
+      "original_language": "en",
+      "original_title": "Moana 2",
+      "overview": "Tras recibir una inesperada llamada de sus antepasados, Vaiana debe viajar a los lejanos mares de Oceanía y adentrarse en peligrosas aguas perdidas para vivir una aventura sin precedentes.",
+      "popularity": 200.9148,
+      "poster_path": "/b1WsCRfomw7tRi12NuseKsAJxYK.jpg",
+      "release_date": "2024-11-21",
+      "title": "Vaiana 2",
+      "video": false,
+      "vote_average": 7.118,
+      "vote_count": 2106
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/3xN4vNPWBSVDsiiOzL5sB95Sa1J.jpg",
+      "genre_ids": [
+        53,
+        9648
+      ],
+      "id": 257094,
+      "original_language": "en",
+      "original_title": "Holland",
+      "overview": "En esta película de suspense impredecible, Nicole Kidman es la meticulosa Nancy Vandergroot, una profesora y ama de casa cuya vida perfecta con su marido y su hijo en Holland, Míchigan, una ciudad llena de tulipanes, se convierte en una historia retorcida. Nancy y su amable compañero de trabajo empiezan a sospechar de un secreto, y acaban descubriendo que nada en sus vidas es lo que parece.",
+      "popularity": 215.8281,
+      "poster_path": "/39jIr3A4ScUeGxFdMeARYKNxTgU.jpg",
+      "release_date": "2025-03-27",
+      "title": "Holland",
+      "video": false,
+      "vote_average": 5.5,
+      "vote_count": 125
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/e807jDKiFcntZS32ze88X6I96OD.jpg",
+      "genre_ids": [
+        16,
+        28
+      ],
+      "id": 1297763,
+      "original_language": "ja",
+      "original_title": "ニンジャバットマン対ヤクザリーグ",
+      "overview": "Sólo un día después de regresar del pasado, Batman y sus aliados descubren que el mundo no es exactamente el mismo que dejaron. Toda la isla de Japón ya no existe y los héroes de la Liga de la Justicia tampoco. Pero antes de que puedan comprender lo que está pasando, los yakuza empiezan a llover literalmente del cielo. Secuela de la película anime 3D \"Batman Ninja\".",
+      "popularity": 152.5398,
+      "poster_path": "/3hVjnB5FE4gBrR5rqk42qiBFgGe.jpg",
+      "release_date": "2025-03-17",
+      "title": "Batman Ninja vs. Yakuza League",
+      "video": false,
+      "vote_average": 6.8,
+      "vote_count": 97
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/deUWVEgNh2IGjShyymZhaYP40ye.jpg",
+      "genre_ids": [
+        28,
+        12,
+        53
+      ],
+      "id": 1356039,
+      "original_language": "es",
+      "original_title": "Contraataque",
+      "overview": "En una misión de rescate de rehenes, el capitán Guerrero y sus soldados de élite sufren una emboscada de un despiadado cártel de la droga.",
+      "popularity": 152.5612,
+      "poster_path": "/kxnFdLJhi37ZVFDCL1ka0yeQVU5.jpg",
+      "release_date": "2025-02-27",
+      "title": "Contraataque",
+      "video": false,
+      "vote_average": 8.4,
+      "vote_count": 577
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/sulUXRukzh7WSK34y8mnaUcHo3y.jpg",
+      "genre_ids": [
+        10749,
+        35,
+        18
+      ],
+      "id": 1254786,
+      "original_language": "en",
+      "original_title": "The Life List",
+      "overview": "Cuando su madre la envía a una misión para completar su lista de deseos de la adolescencia, una joven desvela secretos familiares, encuentra el amor... y se redescubre.",
+      "popularity": 178.0173,
+      "poster_path": "/r6K6spYEWf7aDGsY4EdkScZW1Hl.jpg",
+      "release_date": "2025-03-27",
+      "title": "Mi lista de deseos",
+      "video": false,
+      "vote_average": 7,
+      "vote_count": 85
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/19pr5CzgsBYs67FAJvke8GQxN4g.jpg",
+      "genre_ids": [
+        27
+      ],
+      "id": 1301650,
+      "original_language": "mn",
+      "original_title": "Z Zone",
+      "overview": "En un rincón remoto del mundo, un grupo de jóvenes con problemas se encuentra llevado a una misteriosa base militar después de una serie de mal comportamiento. Esperando poco más que una severa reprimenda, en su lugar se les lleva a un mundo de secretos y sombras. En una intención desesperada por la libertad, deben desentrañar los misterios de la base y confrontar a las siniestras fuerzas que acechan en las sombras. Pero con el tiempo agotado y el peligro que acecha en cada esquina, las probabilidades de supervivencia se vuelven más delgadas por minuto. Coraje, fuerza y ​​sacrificio, ¿finalmente escaparían de las garras de la base y salen de la oscuridad a la luz?",
+      "popularity": 139.4743,
+      "poster_path": "/ynW7ZFLZsbVQozvzdAOLdQrLL9P.jpg",
+      "release_date": "2025-02-07",
+      "title": "Z Zone",
+      "video": false,
+      "vote_average": 7.1,
+      "vote_count": 14
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/gFFqWsjLjRfipKzlzaYPD097FNC.jpg",
+      "genre_ids": [
+        28,
+        80,
+        53
+      ],
+      "id": 1126166,
+      "original_language": "en",
+      "original_title": "Flight Risk",
+      "overview": "En este claustrofóbico thriller, un piloto (Mark Wahlberg) transporta en su avioneta a una teniente general (Michelle Dockery) que custodia a un testigo (Topher Grace) que va a testificar en un juicio contra la mafia. A medida que atraviesan las montañas de Alaska, las tensiones se disparan, ya que no todo el mundo a bordo es quien parece ser. Y a 3.000 metros de altura no hay escapatoria posible.",
+      "popularity": 140.447,
+      "poster_path": "/8T6nkYb4W8BIeafmFffyfsRciTL.jpg",
+      "release_date": "2025-01-22",
+      "title": "Amenaza en el aire",
+      "video": false,
+      "vote_average": 6.153,
+      "vote_count": 559
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/9nhjGaFLKtddDPtPaX5EmKqsWdH.jpg",
+      "genre_ids": [
+        10749,
+        878,
+        53
+      ],
+      "id": 950396,
+      "original_language": "en",
+      "original_title": "The Gorge",
+      "overview": "Dos agentes de élite son secretamente asignados a torres de vigilancia en los lados opuestos de un vasto desfiladero, para proteger al mundo de un misterioso mal que acecha en su interior. Se unen en la distancia, pero han de mantenerse alerta para defenderse del enemigo invisible. Cuando se les revela una amenaza fatal para la humanidad, deben trabajar juntos y poner a prueba su fuerza física y mental para mantener el secreto del desfiladero antes de que sea demasiado tarde.",
+      "popularity": 127.1959,
+      "poster_path": "/3s0jkMh0YUhIeIeioH3kt2X4st4.jpg",
+      "release_date": "2025-02-13",
+      "title": "El abismo secreto",
+      "video": false,
+      "vote_average": 7.739,
+      "vote_count": 2217
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/zOpe0eHsq0A2NvNyBbtT6sj53qV.jpg",
+      "genre_ids": [
+        28,
+        878,
+        35,
+        10751,
+        12,
+        14
+      ],
+      "id": 939243,
+      "original_language": "en",
+      "original_title": "Sonic the Hedgehog 3",
+      "overview": "Sonic, Knuckles y Tails se reúnen para enfrentarse a un nuevo y poderoso adversario, Shadow, un misterioso villano cuyos poderes no se parecen a nada de lo que nuestros héroes han conocido hasta ahora. Con sus facultades superadas en todos los sentidos, el Equipo Sonic tendrá que establecer una insólita alianza con la esperanza de detener a Shadow y proteger el planeta.",
+      "popularity": 137.6689,
+      "poster_path": "/3aDWCRXLYOCuxjrjiPfLd79tcI6.jpg",
+      "release_date": "2024-12-19",
+      "title": "Sonic 3: La película",
+      "video": false,
+      "vote_average": 7.8,
+      "vote_count": 2303
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/99XoA625Gl9Q5tBKGX1nf2g11yJ.jpg",
+      "genre_ids": [
+        27,
+        14
+      ],
+      "id": 1139937,
+      "original_language": "en",
+      "original_title": "Frogman",
+      "overview": "",
+      "popularity": 117.6192,
+      "poster_path": "/wFCM4SKsBQIpKXhcCGgkVf7DK2F.jpg",
+      "release_date": "2024-09-26",
+      "title": "Frogman",
+      "video": false,
+      "vote_average": 5,
+      "vote_count": 9
+    }
+  ]
