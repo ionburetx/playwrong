@@ -5,9 +5,9 @@ import TrendingList from './components/TrendingList';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-gray-100 w-full">
         <Header />
-        <main>
+        <main className="w-full">
           <TrendingList />
         </main>
       </div>
