@@ -1,0 +1,29 @@
+# .github/workflows/integracion-dev.yml
+
+name: Integración y Novedades en DEV
+
+on:
+  push:
+    branches:
+      - dev # Esta automatización se activa solo cuando hay un 'push' a la rama 'dev'
+
+jobs:
+  notificar_equipo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4 # Clona el repositorio para acceder a la info del commit
+
+      - name: Mensaje de Integración DEV
+        run: |
+          echo "==================================================="
+          echo "¡Hola, equipo de desarrolladores!"
+          echo "Se ha integrado un nuevo cambio en la rama 'dev'."
+          echo "Esto acerca nuestro proyecto al próximo lanzamiento."
+          echo "---------------------------------------------------"
+          echo "Autor del cambio: ${{ github.actor }}"
+          echo "Commit ID: ${{ github.sha }}"
+          echo "Mensaje del commit: ${{ github.event.head_commit.message }}"
+          echo "---------------------------------------------------"
+          echo "¡Recuerden probar los cambios y mantenerse sincronizados!"
+          echo "==================================================="
