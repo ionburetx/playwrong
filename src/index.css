@@ -2,26 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Reset básico */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden;
-}
-
-#root {
-  width: 100%;
-  padding: 0;
-  margin: 0;
-}
-
 /* Estilos del Swiper */
 .swiper {
   width: 100vw;
