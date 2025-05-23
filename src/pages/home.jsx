@@ -26,9 +26,9 @@ const Home = () => {
         ]);
 
         setMoviesData({
-          action: actionMovies.slice(0, 8),
-          drama: dramaMovies.slice(0, 8),
-          comedy: comedyMovies.slice(0, 8)
+          action: actionMovies.slice(0, 9),
+          drama: dramaMovies.slice(0, 9),
+          comedy: comedyMovies.slice(0, 9)
         });
       } catch (err) {
         setError(err.message);
