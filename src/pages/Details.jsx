@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import api from '../services/api';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
+import { FaPlay } from 'react-icons/fa';
 
 const Details = () => {
   const { id } = useParams();
@@ -31,48 +32,50 @@ if (!movie) return <Error message="Película no encontrada" />;
 
 console.log(movie.genres);
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="relative h-96">
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="relative h-[100vh]">
             <img
               src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
               alt={movie.title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent">
-              <div className="absolute bottom-0 p-8">
-                <h1 className="text-4xl font-bold text-white mb-4">{movie.title}</h1>
-                <div className="flex items-center gap-4 text-white mb-4">
-                  <span>{new Date(movie.release_date).getFullYear()}</span>
-                  <span>•</span>
-                  <span>{Math.floor(movie.runtime / 60)}h {movie.runtime % 60}m</span>
-                  <span>•</span>
-                  <span>{movie.vote_average.toFixed(1)} ★</span>
-                </div>
-              </div>
-            </div>
+          className="w-full h-full object-cover"
+        />
+          <div className="absolute inset-0 bg-black/60" />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
+
+        <div className="absolute top-16 left-8 z-10 max-w-[60%] space-y-6">
+          <div>
+            <h1 className="text-5xl font-bold mb-2">{movie.title}</h1>
+            <p className="text-lg">{movie.overview}</p>
+            <button 
+              className="fixed bottom-8 right-8 z-20 bg-blue-400 hover:bg-[#04385d] transition-colors w-16 h-16 rounded-full flex items-center justify-center text-2xl"
+              onClick={() => alert('Play functionality coming soon!')}
+            >
+              <FaPlay className="ml-1"/>
+
+            </button>
           </div>
-          
-          <div className="p-8">
-            <h2 className="text-2xl font-semibold mb-4">Sinopsis</h2>
-            <p className="text-gray-600 mb-6">{movie.overview}</p>
-            
-            {movie.genres && (
-              <div className="mb-6">
-                <h2 className="text-2xl font-semibold mb-4">Géneros</h2>
-                <div className="flex flex-wrap gap-2">
-                  {movie.genres.map(genre => (
-                    <span
-                      key={genre.id}
-                      className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full"
-                    >
-                      {genre.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
+
+          <div>
+            <h2 className="text-2xl font-semibold mb-2">Details</h2>
+            <p><span className="font-bold">Release Date:</span> {movie.release_date}</p>
+            <p><span className="font-bold">Rating:</span> {movie.vote_average}/10</p>
+            <p><span className="font-bold">Runtime:</span> {movie.runtime} minutes</p>
+          </div>
+
+          <div>
+            <h2 className="text-2xl font-semibold mb-2">Genres</h2>
+            <div className="flex flex-wrap gap-2">
+              {movie.genres && movie.genres.map(genre => (
+                <span 
+                  key={genre.id}
+                  className="px-3 py-1 bg-blue-600 rounded-full text-sm"
+                >
+                  {genre.name}
+                </span>
+
+              ))}
+            </div>
           </div>
         </div>
       </div>
