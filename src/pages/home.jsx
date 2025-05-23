@@ -26,9 +26,9 @@ const Home = () => {
         ]);
 
         setMoviesData({
-          action: actionMovies.slice(0, 9),
-          drama: dramaMovies.slice(0, 9),
-          comedy: comedyMovies.slice(0, 9)
+          action: actionMovies?.slice(0, 8) || [],
+          drama: dramaMovies?.slice(0, 8) || [],
+          comedy: comedyMovies?.slice(0, 8) || []
         });
       } catch (err) {
         setError(err.message);
@@ -44,7 +44,7 @@ const Home = () => {
   if (error) return <Error message={error} />;
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-100">
       <TrendingList />
       
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-12">
@@ -78,7 +78,7 @@ const Home = () => {
           </div>
         </section>
       </div>
-    </>
+    </div>
   );
 };
 

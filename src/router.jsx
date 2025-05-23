@@ -8,10 +8,10 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<Home />} />
-          <Route path="movie/:id" element={<Details />} />
-          <Route path="genre/:genreId" element={<Genre />} />
+        <Route element={<App />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/movie/:id" element={<Details />} />
+          <Route path="/genre/:genreId" element={<Genre />} />
         </Route>
       </Routes>
     </BrowserRouter>

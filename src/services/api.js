@@ -1,4 +1,4 @@
-// src/services/api.js
+// src/services/api.js instancia de axios para hacer peticiones a la API de TMDB
 import axios from "axios"
 
 const api = axios.create({
@@ -9,7 +9,7 @@ const api = axios.create({
   }
 })
 
-const getMoviesByGenre = async (genreId) => {
+export const getMoviesByGenre = async (genreId) => {
   try {
     const response = await api.get('/discover/movie', {
       params: {
@@ -24,7 +24,7 @@ const getMoviesByGenre = async (genreId) => {
   }
 }
 
-const getGenres = async () => {
+export const getGenres = async () => {
   try {
     const response = await api.get('/genre/movie/list')
     return response.data.genres
@@ -34,4 +34,4 @@ const getGenres = async () => {
   }
 }
 
-export { api as default, getMoviesByGenre, getGenres }
+export default api

@@ -1,32 +1,27 @@
-import { StrictMode } from 'react'
+import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { Auth0Provider } from '@auth0/auth0-react'
 import './index.css'
-import Router from './router.jsx'
+import Router from './router'
 
 async function enableMocking() {
-  if (process.env.NODE_ENV !== 'development') {
-    return
+  if (process.env.NODE_ENV === 'development') {
+    const { worker } = await import('./mocks/browser')
+    await worker.start({
+      onUnhandledRequest: 'bypass',
+    })
   }
-
-  const { worker } = await import('./mocks/browser')
-  return worker.start({
-    onUnhandledRequest: 'bypass',
-  })
 }
 
-enableMocking().then(() => {
-  createRoot(document.getElementById('root')).render(
-    <StrictMode>
-      <Auth0Provider
-        domain={import.meta.env.VITE_AUTH0_DOMAIN}
-        clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
-        authorizationParams={{
-          redirect_uri: window.location.origin
-        }}
-      >
-        <App />
-      </Auth0Provider>
-    </StrictMode>,
+// Inicializar la aplicación
+const startApp = async () => {
+  await enableMocking()
+  const root = createRoot(document.getElementById('root'))
+  
+  root.render(
+    <React.StrictMode>
+      <Router />
+    </React.StrictMode>
   )
-})
+}
+
+startApp()
