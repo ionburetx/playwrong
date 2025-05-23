@@ -1,6 +1,8 @@
-import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import api from '../services/api';
+import Loading from '../components/Loading';
+import Error from '../components/Error';
 
 const Details = () => {
   const { id } = useParams();
@@ -11,58 +13,66 @@ const Details = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${id}?api_key=${import.meta.env.VITE_TMDB_API_KEY}`
-        );
+        setLoading(true);
+        const response = await api.get(`/movie/${id}`);
         setMovie(response.data);
-        setLoading(false);
       } catch (err) {
         setError(err.message);
+      } finally {
         setLoading(false);
-      }
-    };
+    }
+};
+fetchMovie();
+}, [id]);
 
-    fetchMovie();
-  }, [id]);
+if (loading) return <Loading />;
+if (error) return <Error message={error} />;
+if (!movie) return <Error message="Película no encontrada" />;
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!movie) return <div>No movie found</div>;
-
+console.log(movie.genres);
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <div className="relative h-[70vh]">
-        <img
-          src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-          alt={movie.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent" />
-      </div>
-      
-      <div className="max-w-7xl mx-auto px-4 py-8 -mt-32 relative z-10">
-        <h1 className="text-5xl font-bold mb-4">{movie.title}</h1>
-        <p className="text-lg mb-4">{movie.overview}</p>
-        
-        <div className="grid grid-cols-2 gap-8 mt-8">
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Details</h2>
-            <p><span className="font-bold">Release Date:</span> {movie.release_date}</p>
-            <p><span className="font-bold">Rating:</span> {movie.vote_average}/10</p>
-            <p><span className="font-bold">Runtime:</span> {movie.runtime} minutes</p>
-          </div>
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Genres</h2>
-            <div className="flex flex-wrap gap-2">
-              {movie.genres && (movie.genres.map(genre => (
-                <span 
-                  key={genre.id}
-                  className="px-3 py-1 bg-blue-600 rounded-full text-sm"
-                >
-                  {genre.name}
-                </span>
-              )))}
+    <div className="min-h-screen bg-gray-100 py-8">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="relative h-96">
+            <img
+              src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+              alt={movie.title}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent">
+              <div className="absolute bottom-0 p-8">
+                <h1 className="text-4xl font-bold text-white mb-4">{movie.title}</h1>
+                <div className="flex items-center gap-4 text-white mb-4">
+                  <span>{new Date(movie.release_date).getFullYear()}</span>
+                  <span>•</span>
+                  <span>{Math.floor(movie.runtime / 60)}h {movie.runtime % 60}m</span>
+                  <span>•</span>
+                  <span>{movie.vote_average.toFixed(1)} ★</span>
+                </div>
+              </div>
             </div>
+          </div>
+          
+          <div className="p-8">
+            <h2 className="text-2xl font-semibold mb-4">Sinopsis</h2>
+            <p className="text-gray-600 mb-6">{movie.overview}</p>
+            
+            {movie.genres && (
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold mb-4">Géneros</h2>
+                <div className="flex flex-wrap gap-2">
+                  {movie.genres.map(genre => (
+                    <span
+                      key={genre.id}
+                      className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full"
+                    >
+                      {genre.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
