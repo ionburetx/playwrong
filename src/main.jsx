@@ -1,23 +1,27 @@
-import { StrictMode } from 'react'
+import React from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.jsx'
+import Router from './router'
 
 async function enableMocking() {
-  if (process.env.NODE_ENV !== 'development') {
-    return
+  if (process.env.NODE_ENV === 'development') {
+    const { worker } = await import('./mocks/browser')
+    await worker.start({
+      onUnhandledRequest: 'bypass',
+    })
   }
-
-  const { worker } = await import('./mocks/browser')
-  return worker.start({
-    onUnhandledRequest: 'bypass', // Permite que las peticiones no mockeadas pasen normalmente
-  })
 }
 
-enableMocking().then(() => {
-  createRoot(document.getElementById('root')).render(
-    <StrictMode>
-      <App />
-    </StrictMode>,
+// Inicializar la aplicación
+const startApp = async () => {
+  await enableMocking()
+  const root = createRoot(document.getElementById('root'))
+  
+  root.render(
+    <React.StrictMode>
+      <Router />
+    </React.StrictMode>
   )
-})
+}
+
+startApp()
