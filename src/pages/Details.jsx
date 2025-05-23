@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { FaPlay } from 'react-icons/fa';
 
 const Details = () => {
   const { id } = useParams();
@@ -38,12 +39,21 @@ const Details = () => {
           alt={movie.title}
           className="w-full h-full object-cover"
         />
+          <div className="absolute inset-0 bg-black/60" />
+          
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
   
         <div className="absolute top-16 left-8 z-10 max-w-[60%] space-y-6">
           <div>
             <h1 className="text-5xl font-bold mb-2">{movie.title}</h1>
             <p className="text-lg">{movie.overview}</p>
+            <button 
+              className="fixed bottom-8 right-8 z-20 bg-blue-400 hover:bg-[#04385d] transition-colors w-16 h-16 rounded-full flex items-center justify-center text-2xl"
+              onClick={() => alert('Play functionality coming soon!')}
+            >
+              <FaPlay className="ml-1"/>
+              
+            </button>
           </div>
   
           <div>
@@ -63,6 +73,7 @@ const Details = () => {
                 >
                   {genre.name}
                 </span>
+                
               ))}
             </div>
           </div>

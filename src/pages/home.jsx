@@ -17,11 +17,11 @@ const Home = () => {
         />
         <GenreList 
           title="Comedia" 
-          movies={movies.filter(m => m.category === 'Comedia')} 
+          movies={movies} 
         />
         <GenreList 
           title="Ficción" 
-          movies={movies.filter(m => m.category === 'Ficción')} 
+          movies={movies} 
         />
       </div>
     </div>
