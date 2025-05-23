@@ -18,7 +18,7 @@ export default function Header() {
     <nav className="hidden md:flex space-x-6 text-lg text-white">
       <Link to="/genre/18" className="text-white hover:text-gray-200 active:text-black transition-colors">Drama</Link>
       <Link to="/genre/35" className="text-white hover:text-gray-200 active:text-black transition-colors">Comedia</Link>
-      <Link to="/genre/878" className="text-white hover:text-gray-200 active:text-black transition-colors">Ficción</Link>
+      <Link to="/genre/28" className="text-white hover:text-gray-200 active:text-black transition-colors">Acción</Link>
     </nav>
 
     {/* Botón de Login */}
