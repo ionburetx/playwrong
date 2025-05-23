@@ -35,7 +35,17 @@
       "title": "Relatos Fantásticos",
       "video": false,
       "vote_average": 5.735,
-      "vote_count": 17
+      "vote_count": 17,
+      "genres": [
+        {
+          "id": 878,
+          "name": "Ciencia ficción"
+        },
+        {
+          "id": 53,
+          "name": "Suspense"
+        }
+      ]
     },
     {
       "adult": false,
