@@ -1,8 +1,32 @@
 import { http, HttpResponse } from 'msw'
-import populares from './populares.json'
 
-// Usar directamente los datos del archivo json
-const mockMovies = populares
+// Datos de prueba incorporados
+const mockMovies = [
+  {
+    id: 1,
+    title: "Película de Acción",
+    genre_ids: [28],
+    overview: "Una película de acción emocionante"
+  },
+  {
+    id: 2,
+    title: "Drama Intenso",
+    genre_ids: [18],
+    overview: "Un drama conmovedor"
+  },
+  {
+    id: 3,
+    title: "Comedia Divertida",
+    genre_ids: [35],
+    overview: "Una comedia para reír"
+  },
+  {
+    id: 4,
+    title: "Acción y Drama",
+    genre_ids: [28, 18],
+    overview: "Mezcla de acción y drama"
+  }
+]
 
 // Función auxiliar para filtrar películas por género
 const filterMoviesByGenre = (movies, genreId) => {
