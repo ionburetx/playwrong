@@ -15,7 +15,7 @@ async function enableMocking() {
 
 // Inicializar la aplicación
 const startApp = async () => {
-  await enableMocking()
+  //await enableMocking()
   const root = createRoot(document.getElementById('root'))
   
   root.render(
