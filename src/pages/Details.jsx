@@ -9,52 +9,70 @@ const Details = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { 
-    fetchMovieDetails, 
-    getMovieDetailsFromCache,
-    fetchGenres,
-    getMovieGenreNames 
-  } = useMovieStore();
   const [movie, setMovie] = useState(null);
+  const [genreNames, setGenreNames] = useState([]);
+  
+  const { 
+    fetchMovieDetails,
+    fetchGenres,
+    getMovieGenreNames,
+    genres
+  } = useMovieStore();
 
   useEffect(() => {
     const loadMovieAndGenres = async () => {
       try {
         setLoading(true);
         
-        // Fetch genres if not already cached
-        await fetchGenres();
+        // First ensure we have genres
+        if (genres.length === 0) {
+          await fetchGenres();
+        }
         
         // Get movie details
         const movieData = await fetchMovieDetails(id);
         setMovie(movieData);
+
+        // Get genre names after both movie and genres are loaded
+        const names = getMovieGenreNames(
+          movieData.genre_ids || movieData.genres?.map(g => g.id)
+        );
+        setGenreNames(names);
+
       } catch (err) {
         setError(err.message);
+        console.error('Error loading movie details:', err);
       } finally {
         setLoading(false);
       }
     };
 
     loadMovieAndGenres();
-  }, [id, fetchMovieDetails, fetchGenres]);
+  }, [id, fetchMovieDetails, fetchGenres, getMovieGenreNames, genres.length]);
+
+  // Update genre names when genres or movie changes
+  useEffect(() => {
+    if (movie && genres.length > 0) {
+      const names = getMovieGenreNames(
+        movie.genre_ids || movie.genres?.map(g => g.id)
+      );
+      setGenreNames(names);
+    }
+  }, [movie, genres, getMovieGenreNames]);
 
   if (loading) return <Loading />;
   if (error) return <Error message={error} />;
   if (!movie) return <Error message="Película no encontrada" />;
 
-  // Get genre names for the movie
-  const genreNames = getMovieGenreNames(movie.genre_ids || movie.genres?.map(g => g.id));
-
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="relative h-[100vh]">
-            <img
-              src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-              alt={movie.title}
+        <img
+          src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+          alt={movie.title}
           className="w-full h-full object-cover"
         />
-          <div className="absolute inset-0 bg-black/60" />
-
+        <div className="absolute inset-0 bg-black/60" />
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
 
         <div className="absolute top-16 left-8 z-10 max-w-[60%] space-y-6">
@@ -66,7 +84,6 @@ const Details = () => {
               onClick={() => alert('Play functionality coming soon!')}
             >
               <FaPlay className="ml-1"/>
-
             </button>
           </div>
 

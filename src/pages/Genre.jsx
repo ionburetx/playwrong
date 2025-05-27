@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getGenres } from '../services/api';
 import MovieCard from '../components/moviecard/MovieCard';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
@@ -8,42 +7,59 @@ import { useMovieStore } from '../store/moviesStore';
 
 const Genre = () => {
   const { genreId } = useParams();
-  const [genreName, setGenreName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [genreName, setGenreName] = useState('');
   
-  const { fetchMoviesByGenre, getMoviesFromCache } = useMovieStore();
+  const { 
+    fetchMoviesByGenre, 
+    getMoviesFromCache,
+    getGenreName,
+    genres,
+    fetchGenres
+  } = useMovieStore();
 
   useEffect(() => {
-    const fetchMoviesAndGenre = async () => {
+    const loadContent = async () => {
       try {
         setLoading(true);
-        // Get genre name
-        const genres = await getGenres();
-        const genre = genres.find(g => g.id === parseInt(genreId));
-        setGenreName(genre?.name || 'Género');
+        
+        // First fetch genres if we don't have them
+        if (genres.length === 0) {
+          await fetchGenres();
+        }
+        
+        // Set genre name after genres are loaded
+        setGenreName(getGenreName(genreId));
 
-        // Check if we have cached movies first
+        // Check if we need to fetch movies
         const cachedMovies = getMoviesFromCache(genreId);
-        if (!cachedMovies) {
-          // Only fetch if not in cache
+        if (!cachedMovies?.length) {
           await fetchMoviesByGenre(genreId);
         }
       } catch (err) {
         setError(err.message);
+        console.error('Error loading genre content:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMoviesAndGenre();
-  }, [genreId, fetchMoviesByGenre, getMoviesFromCache]);
+    loadContent();
+  }, [genreId, fetchMoviesByGenre, getMoviesFromCache, fetchGenres, genres.length, getGenreName]);
 
-  if (loading) return <Loading />;
-  if (error) return <Error message={error} />;
+  // Update genre name when genres or genreId changes
+  useEffect(() => {
+    if (genres.length > 0) {
+      setGenreName(getGenreName(genreId));
+    }
+  }, [genres, genreId, getGenreName]);
 
   // Get movies from cache
   const movies = getMoviesFromCache(genreId) || [];
+
+  if (loading && (!movies.length || !genreName)) return <Loading />;
+  if (error) return <Error message={error} />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
