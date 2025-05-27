@@ -5,6 +5,7 @@ import Loading from '../components/Loading';
 import Error from '../components/Error';
 import { FaPlay } from 'react-icons/fa';
 
+
 const Details = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
