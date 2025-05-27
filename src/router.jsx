@@ -5,7 +5,6 @@ import Details from "./pages/Details";
 import Genre from './pages/Genre';
 import ProtectedRoute from "./components/ProtectedRoute";
 import MyProfile from "./pages/MyProfile";
-import Admin from "./pages/Admin";
 
 export default function Router() {
   return (
@@ -16,10 +15,6 @@ export default function Router() {
           <Route path="/movie/:id" element={<Details />} />
           <Route path="/genre/:genreId" element={<Genre />} />
           <Route path="/myprofile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
-          {/* <ProtectedRoute>
-            <Route path="/myprofile" element={<MyProfile />} />
-            <Route path="/admin" element={<Admin />} />
-          </ProtectedRoute> */}
         </Route>
       </Routes>
     </BrowserRouter>
