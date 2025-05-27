@@ -13,6 +13,7 @@ const Details = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [videoKey, setVideoKey] = useState(null);
 
   const handleClose = () => {
     navigate(-1);
@@ -23,13 +24,22 @@ const Details = () => {
     const fetchMovieAndCredits = async () => {
       try {
         setLoading(true);
-        const [movieResponse, creditsResponse] = await Promise.all([
+        const [movieResponse, creditsResponse, videosResponse] = await Promise.all([
           api.get(`/movie/${id}`),
-          api.get(`/movie/${id}/credits`)
+          api.get(`/movie/${id}/credits`),
+          api.get(`/movie/${id}/videos`)
         ]);
         
         setMovie(movieResponse.data);
         setCredits(creditsResponse.data);
+
+        const trailer = videosResponse.data.results.find(
+          video => video.type === "Trailer" && video.site === "YouTube"
+        ) || videosResponse.data.results[0];
+        
+        if (trailer) {
+          setVideoKey(trailer.key);
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -50,14 +60,35 @@ const Details = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="relative min-h-screen">
-        {/* Background Image and Overlay */}
-        <img
-          src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-          alt={movie.title}
-          className="w-full h-full absolute object-cover"
-        />
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
+        {/* Background Image/Video */}
+        {isPlaying && videoKey ? (
+  <div className="absolute inset-0 w-full h-full z-10 bg-black">
+    <iframe
+      src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=0&controls=1&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=1&playsinline=1`}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowFullScreen
+      frameBorder="0"
+      className="absolute top-1/2 left-1/2 w-[100vw] h-[100vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+      style={{
+        aspectRatio: '16/9',
+        minWidth: '100%',
+        minHeight: '100%',
+        objectFit: 'cover'
+      }}
+      title="Movie Trailer"
+    />
+  </div>
+) : (
+  <img
+    src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+    alt={movie.title}
+    className="w-full h-full absolute object-cover"
+  />
+)}
+
+        <div className={`absolute inset-0 bg-black/60 ${isPlaying ? 'bg-opacity-30' : ''}`} />
+        <div className={`absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent ${isPlaying ? 'opacity-30' : ''}`} />
+
 
         {/* Close Button */}
         <button
