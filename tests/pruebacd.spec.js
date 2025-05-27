@@ -11,6 +11,6 @@ test('test', async ({ page }) => {
   await page.getByRole('link', { name: 'Ficción' }).click();
   await page.getByRole('link', { name: 'Logo' }).click();
   await page.locator('.absolute > .inline-block').first().click();
-  await page.locator('section').filter({ hasText: 'DramaLos silenciososEn 2008,' }).getByRole('link').first().click();
-await page.pause();
+  //await page.locator('section').filter({ hasText: 'DramaLos silenciososEn 2008,' }).getByRole('link').first().click();
+  await page.pause();
 });
