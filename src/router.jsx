@@ -5,6 +5,7 @@ import Details from "./pages/Details";
 import Genre from './pages/Genre';
 import ProtectedRoute from "./components/ProtectedRoute";
 import MyProfile from "./pages/MyProfile";
+import Search from './pages/Search';
 
 export default function Router() {
   return (
@@ -15,6 +16,7 @@ export default function Router() {
           <Route path="/movie/:id" element={<Details />} />
           <Route path="/genre/:genreId" element={<Genre />} />
           <Route path="/myprofile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
+          <Route path="/search" element={<Search />} />
         </Route>
       </Routes>
     </BrowserRouter>

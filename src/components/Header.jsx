@@ -1,32 +1,40 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import logo from '../assets/logo.png';
+import SearchBar from './SearchBar';
 
 export default function Header() {
   const { loginWithRedirect, logout, user, isAuthenticated, isLoading } = useAuth0();
+  const navigate = useNavigate();
+
+  const handleSearch = (query) => {
+    navigate(`/search?q=${encodeURIComponent(query)}`);
+  };
 
   return (
-    <header className="bg-blue-400 text-white px-6 py-4 flex items-center">
-      {/* Logo */}
-      <div className="text-2xl font-bold">
-        <Link to="/">
-          <img src={logo} alt="Logo" className="h-10" />
+    <header className="bg-blue-400 text-white px-8 py-3 flex items-center justify-between">
+      {/* Logo y Barra de búsqueda */}
+      <div className="flex items-center space-x-8 flex-1">
+        <Link to="/" className="flex-shrink-0">
+          <img src={logo} alt="Logo" className="h-12" />
         </Link>
+        
+        <div className="max-w-xl w-full">
+          <SearchBar onSearch={handleSearch} />
+        </div>
       </div>
 
-      {/* Navbar + Login juntos */}
-      <div className="ml-auto flex items-center gap-6">
-        {/* Navbar */}
-        <nav className="hidden md:flex space-x-6 text-lg text-white">
+      {/* Navegación y Autenticación */}
+      <div className="flex items-center space-x-8">
+        <nav className="hidden md:flex space-x-8 text-lg">
           <Link to="/genre/18" className="text-white hover:text-gray-200 active:text-black transition-colors">Drama</Link>
           <Link to="/genre/35" className="text-white hover:text-gray-200 active:text-black transition-colors">Comedia</Link>
           <Link to="/genre/878" className="text-white hover:text-gray-200 active:text-black transition-colors">Ficción</Link>
         </nav>
 
-        {/* Usuario y Auth */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center space-x-4">
           {isAuthenticated && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center space-x-3">
               <img 
                 src={user.picture} 
                 alt={user.name} 
