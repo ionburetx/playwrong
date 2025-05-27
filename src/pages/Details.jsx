@@ -12,6 +12,7 @@ const Details = () => {
   const [credits, setCredits] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const handleClose = () => {
     navigate(-1);
@@ -59,18 +60,19 @@ const Details = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
 
         {/* Close Button */}
-        <div className="absolute -top-4 right-8">
-          <button
+        <button
           onClick={handleClose}
           className="fixed top-24 right-8 z-50 text-white hover:text-gray-300 transition-colors text-2xl"
         >
           <FaTimes className="w-8 h-8" />
         </button>
-        </div>
 
         {/* Content */}
-        <div className="relative z-10 container mx-auto px-4 py-8">
-
+        <div 
+          className={`relative z-10 container mx-auto px-4 py-8 transform transition-all duration-700 ease-in-out ${
+            isPlaying ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100'
+          }`}
+        >
           <div className="flex flex-col md:flex-row gap-8">
             {/* Movie Poster */}
             <div className="flex-shrink-0 w-full md:w-80">
@@ -148,12 +150,11 @@ const Details = () => {
           </div>
         </div>
 
-        <div className="fixed right-8 bottom-8 flex flex-col gap-4 z-20">
-
-          {/* Play Button */}
+        {/* Play Button */}
+        <div className="fixed right-8 bottom-8 z-20">
           <button 
-            className="bg-blue-400 hover:bg-[#04385d] transition-colors w-16 h-16 rounded-full flex items-center justify-center text-2xl"
-            onClick={() => alert('Play functionality coming soon!')}
+          className="bg-blue-400 hover:bg-[#04385d] transition-all duration-700 w-16 h-16 rounded-full flex items-center justify-center text-2xl"
+          onClick={() => setIsPlaying(true)}
           >
             <FaPlay className="ml-1"/>
           </button>

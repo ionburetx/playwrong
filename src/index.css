@@ -45,3 +45,35 @@
     transform: translateY(0);
   }
 }
+
+.transform {
+  will-change: transform, opacity;
+}
+
+.transition-transform {
+  transition-property: transform, opacity;
+}
+
+.transition-all {
+  transition-property: all;
+}
+
+.duration-700 {
+  transition-duration: 700ms;
+}
+
+.ease-in-out {
+  transition-timing-function: ease-in-out;
+}
+
+.transition-all {
+  transition-property: all;
+}
+
+.duration-700 {
+  transition-duration: 700ms;
+}
+
+.ease-in-out {
+  transition-timing-function: ease-in-out;
+}
