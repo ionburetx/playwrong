@@ -1,29 +1,34 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMoviesByGenre, getGenres } from '../services/api';
+import { getGenres } from '../services/api';
 import MovieCard from '../components/moviecard/MovieCard';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
+import { useMovieStore } from '../store/moviesStore';
 
 const Genre = () => {
   const { genreId } = useParams();
-  const [movies, setMovies] = useState([]);
   const [genreName, setGenreName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  const { fetchMoviesByGenre, getMoviesFromCache } = useMovieStore();
 
   useEffect(() => {
     const fetchMoviesAndGenre = async () => {
       try {
         setLoading(true);
-        // Obtener el nombre del género
+        // Get genre name
         const genres = await getGenres();
         const genre = genres.find(g => g.id === parseInt(genreId));
         setGenreName(genre?.name || 'Género');
 
-        // Obtener las películas del género
-        const moviesData = await getMoviesByGenre(genreId);
-        setMovies(moviesData);
+        // Check if we have cached movies first
+        const cachedMovies = getMoviesFromCache(genreId);
+        if (!cachedMovies) {
+          // Only fetch if not in cache
+          await fetchMoviesByGenre(genreId);
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -32,10 +37,13 @@ const Genre = () => {
     };
 
     fetchMoviesAndGenre();
-  }, [genreId]);
+  }, [genreId, fetchMoviesByGenre, getMoviesFromCache]);
 
   if (loading) return <Loading />;
   if (error) return <Error message={error} />;
+
+  // Get movies from cache
+  const movies = getMoviesFromCache(genreId) || [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
