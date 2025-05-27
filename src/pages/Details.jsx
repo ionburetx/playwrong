@@ -1,36 +1,50 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import api from '../services/api';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import { FaPlay } from 'react-icons/fa';
+import { useMovieStore } from '../store/moviesStore';
 
 const Details = () => {
   const { id } = useParams();
-  const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { 
+    fetchMovieDetails, 
+    getMovieDetailsFromCache,
+    fetchGenres,
+    getMovieGenreNames 
+  } = useMovieStore();
+  const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    const fetchMovie = async () => {
+    const loadMovieAndGenres = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`/movie/${id}`);
-        setMovie(response.data);
+        
+        // Fetch genres if not already cached
+        await fetchGenres();
+        
+        // Get movie details
+        const movieData = await fetchMovieDetails(id);
+        setMovie(movieData);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
-    }
-};
-fetchMovie();
-}, [id]);
+      }
+    };
 
-if (loading) return <Loading />;
-if (error) return <Error message={error} />;
-if (!movie) return <Error message="Película no encontrada" />;
+    loadMovieAndGenres();
+  }, [id, fetchMovieDetails, fetchGenres]);
 
-console.log(movie.genres);
+  if (loading) return <Loading />;
+  if (error) return <Error message={error} />;
+  if (!movie) return <Error message="Película no encontrada" />;
+
+  // Get genre names for the movie
+  const genreNames = getMovieGenreNames(movie.genre_ids || movie.genres?.map(g => g.id));
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="relative h-[100vh]">
@@ -66,14 +80,13 @@ console.log(movie.genres);
           <div>
             <h2 className="text-2xl font-semibold mb-2">Genres</h2>
             <div className="flex flex-wrap gap-2">
-              {movie.genres && movie.genres.map(genre => (
+              {genreNames.map((genreName, index) => (
                 <span 
-                  key={genre.id}
+                  key={index}
                   className="px-3 py-1 bg-blue-600 rounded-full text-sm"
                 >
-                  {genre.name}
+                  {genreName}
                 </span>
-
               ))}
             </div>
           </div>
