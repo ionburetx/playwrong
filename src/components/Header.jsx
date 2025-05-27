@@ -33,6 +33,7 @@ export default function Header() {
                 className="w-8 h-8 rounded-full"
               />
               <span className="hidden md:inline">Hola, {user.name}</span>
+              <Link to="/myprofile">Mi Perfil</Link>
             </div>
           )}
           

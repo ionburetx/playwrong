@@ -1,29 +1,56 @@
 # .github/workflows/integracion-dev.yml
 
-name: Integración y Novedades en DEV
+name: CI - Integración en Dev # Nombre visible del workflow en GitHub Actions
 
 on:
   push:
     branches:
-      - dev # Esta automatización se activa solo cuando hay un 'push' a la rama 'dev'
+      - dev
+  pull_request: # <-- Asegúrate de que esta sección esté si la necesitas, o elimínala si solo es 'push'
+    branches:
+      - dev
 
-jobs:
-  notificar_equipo:
+jobs: # <-- Esta es la línea 74, asegúrate de que no tenga espacios delante y esté alineada con 'on:' y 'name:'
+  build_and_test_frontend:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout del código
-        uses: actions/checkout@v4 # Clona el repositorio para acceder a la info del commit
 
-      - name: Mensaje de Integración DEV
-        run: |
-          echo "==================================================="
-          echo "¡Hola, equipo de desarrolladores!"
-          echo "Se ha integrado un nuevo cambio en la rama 'dev'."
-          echo "Esto acerca nuestro proyecto al próximo lanzamiento."
-          echo "---------------------------------------------------"
-          echo "Autor del cambio: ${{ github.actor }}"
-          echo "Commit ID: ${{ github.sha }}"
-          echo "Mensaje del commit: ${{ github.event.head_commit.message }}"
-          echo "---------------------------------------------------"
-          echo "¡Recuerden probar los cambios y mantenerse sincronizados!"
-          echo "==================================================="
+    strategy:
+      matrix:
+        node-version: [ '18', '20' ]
+
+    steps:
+      - name: Checkout del Repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Instalar Dependencias del Proyecto
+        run: npm install
+
+      - name: Instalar Navegadores de Playwright
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Construir Aplicación React (Vite)
+        run: npm run build
+
+      - name: Servir Aplicación Compilada para Pruebas Playwright
+        run: npx serve -l 5173 dist & npx wait-on http://localhost:5173 -t 60000
+        working-directory: .
+
+      - name: Ejecutar Pruebas Playwright
+        run: npx playwright test
+        env:
+          CI: true
+
+      - name: Subir Reporte de Pruebas Playwright
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ github.run_id }} # <-- ¡Así!
+          path: playwright-report/
+          retention-days: 5
+  
