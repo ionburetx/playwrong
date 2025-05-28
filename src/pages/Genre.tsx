@@ -1,14 +1,38 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, FC } from 'react';
+import { useParams, Params } from 'react-router-dom';
 import MovieCard from '../components/moviecard/MovieCard';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import { useMovieStore } from '../store/moviesStore';
 
-const Genre = () => {
-  const { genreId } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+interface TMDBMovie {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+// Only require the properties we know we'll use
+type Movie = Pick<TMDBMovie, 'id' | 'title' | 'poster_path'> & Partial<TMDBMovie>;
+
+interface GenreRouteParams extends Params {
+  genreId: string;
+}
+
+const Genre: FC = () => {
+  const { genreId } = useParams<'genreId'>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   
   const { 
     fetchMoviesByGenre, 
@@ -45,8 +69,8 @@ const Genre = () => {
   }, [genreId, fetchMoviesByGenre, getMoviesFromCache, fetchGenres, genres.length]);
 
   // Get movies from cache and genre name
-  const movies = getMoviesFromCache(genreId) || [];
-  const genreName = genres.length > 0 ? getGenreName(genreId) : '';
+  const movies: Movie[] = getMoviesFromCache(genreId) || [];
+  const genreName: string = genres.length > 0 ? getGenreName(genreId) : '';
 
   if (loading && (!movies.length || !genres.length)) return <Loading />;
   if (error) return <Error message={error} />;
