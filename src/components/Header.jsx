@@ -1,60 +1,153 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useState } from "react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import logo from '../assets/logo.png';
 import SearchBar from './SearchBar';
 
 export default function Header() {
-  const { loginWithRedirect, logout, user, isAuthenticated, isLoading } = useAuth0();
+  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSearch = (query) => {
     navigate(`/search?q=${encodeURIComponent(query)}`);
+    setIsMenuOpen(false);
+  };
+
+  const handleAuthClick = () => {
+    setIsMenuOpen(false);
+    if (isAuthenticated) {
+      logout({ returnTo: window.location.origin });
+    } else {
+      loginWithRedirect();
+    }
   };
 
   return (
-    <header className="bg-blue-400 text-white px-8 py-3 flex items-center justify-between">
-      {/* Logo y Barra de búsqueda */}
-      <div className="flex items-center space-x-8 flex-1">
-        <Link to="/" className="flex-shrink-0">
-          <img src={logo} alt="Logo" className="h-12" />
-        </Link>
-        
-        <div className="max-w-xl w-full">
+    <header className="bg-blue-400 text-white sticky top-0 z-50">
+      <div className="px-4 md:px-8 py-3">
+        {/* Layout Principal */}
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex-shrink-0">
+            <img src={logo} alt="Logo" className="h-8 md:h-12" />
+          </Link>
+
+          {/* Barra de búsqueda - Desktop */}
+          <div className="hidden md:block max-w-xl w-full mx-4">
+            <SearchBar onSearch={handleSearch} />
+          </div>
+
+          {/* Botón de menú móvil */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 rounded-lg hover:bg-blue-500"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <XMarkIcon className="h-6 w-6" />
+            ) : (
+              <Bars3Icon className="h-6 w-6" />
+            )}
+          </button>
+
+          {/* Navegación Desktop */}
+          <div className="hidden md:flex items-center space-x-8">
+            <nav className="flex space-x-8 text-lg">
+              <Link to="/genre/18" className="hover:text-gray-200 transition-colors">
+                Drama
+              </Link>
+              <Link to="/genre/35" className="hover:text-gray-200 transition-colors">
+                Comedia
+              </Link>
+              <Link to="/genre/878" className="hover:text-gray-200 transition-colors">
+                Ficción
+              </Link>
+            </nav>
+
+            {/* Sección de Auth - Desktop */}
+            <div className="flex items-center space-x-4">
+              {isAuthenticated && (
+                <div className="flex items-center space-x-3">
+                  <img 
+                    src={user.picture} 
+                    alt={user.name} 
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <span className="hidden lg:inline">Hola, {user.name}</span>
+                  <Link to="/myprofile">Mi Perfil</Link>
+                </div>
+              )}
+              <button 
+                onClick={handleAuthClick}
+                className="bg-white hover:bg-gray-200 text-black px-4 py-2 rounded-lg font-semibold transition"
+              >
+                {isAuthenticated ? 'Logout' : 'Login'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Barra de búsqueda - Móvil */}
+        <div className="md:hidden mt-2">
           <SearchBar onSearch={handleSearch} />
         </div>
       </div>
 
-      {/* Navegación y Autenticación */}
-      <div className="flex items-center space-x-8">
-        <nav className="hidden md:flex space-x-8 text-lg">
-          <Link to="/genre/18" className="text-white hover:text-gray-200 active:text-black transition-colors">Drama</Link>
-          <Link to="/genre/35" className="text-white hover:text-gray-200 active:text-black transition-colors">Comedia</Link>
-          <Link to="/genre/878" className="text-white hover:text-gray-200 active:text-black transition-colors">Ficción</Link>
-        </nav>
+      {/* Menú Móvil */}
+      <div 
+        className={`md:hidden absolute w-full bg-blue-400 shadow-lg transition-all duration-300 ease-in-out ${
+          isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+        }`}
+      >
+        <nav className="flex flex-col p-4 space-y-4">
+          <Link 
+            to="/genre/18" 
+            className="hover:text-gray-200 py-2"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Drama
+          </Link>
+          <Link 
+            to="/genre/35" 
+            className="hover:text-gray-200 py-2"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Comedia
+          </Link>
+          <Link 
+            to="/genre/878" 
+            className="hover:text-gray-200 py-2"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Ficción
+          </Link>
 
-        <div className="flex items-center space-x-4">
+          {/* Sección de Auth - Móvil */}
           {isAuthenticated && (
-            <div className="flex items-center space-x-3">
-              <img 
-                src={user.picture} 
-                alt={user.name} 
-                className="w-8 h-8 rounded-full"
-              />
-              <span className="hidden md:inline">Hola, {user.name}</span>
-              <Link to="/myprofile">Mi Perfil</Link>
-            </div>
+            <>
+              <div className="flex items-center space-x-3 py-2">
+                <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full" />
+                <span>Hola, {user.name}</span>
+              </div>
+              <Link 
+                to="/myprofile"
+                className="block py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Mi Perfil
+              </Link>
+            </>
           )}
           
           <button 
-            onClick={() => isAuthenticated 
-              ? logout({ returnTo: window.location.origin }) 
-              : loginWithRedirect()
-            }
-            className="bg-white hover:bg-gray-200 text-black px-4 py-2 rounded-lg font-semibold transition"
+            onClick={handleAuthClick}
+            className="w-full bg-white hover:bg-gray-200 text-black px-4 py-2 rounded-lg font-semibold transition"
           >
             {isAuthenticated ? 'Logout' : 'Login'}
           </button>
-        </div>
+        </nav>
       </div>
     </header>
   );
