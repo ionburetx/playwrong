@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
-import { FaPlay, FaTimes } from 'react-icons/fa';
+import { FaPlay, FaPause, FaTimes } from 'react-icons/fa';
 import { useMovieStore } from '../store/moviesStore';
 
 
@@ -17,6 +17,11 @@ const Details = () => {
   const [error, setError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [videoKey, setVideoKey] = useState(null);
+  const playerRef = useRef(null);
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
 
   const handleClose = () => {
     navigate(-1);
@@ -75,29 +80,30 @@ const Details = () => {
       <div className="relative min-h-screen">
         {/* Background Image/Video */}
         {isPlaying && videoKey ? (
-  <div className="absolute inset-0 w-full h-full z-10 bg-black">
-    <iframe
-      src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=0&controls=1&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=1&playsinline=1`}
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowFullScreen
-      frameBorder="0"
-      className="absolute top-1/2 left-1/2 w-[100vw] h-[100vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-      style={{
-        aspectRatio: '16/9',
-        minWidth: '100%',
-        minHeight: '100%',
-        objectFit: 'cover'
-      }}
-      title="Movie Trailer"
-    />
-  </div>
-) : (
-  <img
-    src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-    alt={movie.title}
-    className="w-full h-full absolute object-cover"
-  />
-)}
+          <div className="absolute inset-0 w-full h-full z-10 bg-black">
+            <iframe
+              ref={playerRef}
+              src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=0&controls=1&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=1&playsinline=1`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              frameBorder="0"
+              className="absolute top-1/2 left-1/2 w-[100vw] h-[100vh] -translate-x-1/2 -translate-y-1/2"
+              style={{
+                aspectRatio: '16/9',
+                minWidth: '100%',
+                minHeight: '100%',
+                objectFit: 'cover'
+              }}
+              title="Movie Trailer"
+            />
+          </div>
+        ) : (
+          <img
+            src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+            alt={movie.title}
+            className="w-full h-full absolute object-cover"
+          />
+        )}
 
         <div className={`absolute inset-0 bg-black/60 ${isPlaying ? 'bg-opacity-30' : ''}`} />
         <div className={`absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent ${isPlaying ? 'opacity-30' : ''}`} />
@@ -114,7 +120,7 @@ const Details = () => {
         {/* Content */}
         <div 
           className={`relative z-10 container mx-auto px-4 py-8 transform transition-all duration-700 ease-in-out ${
-            isPlaying ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100'
+            isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
           }`}
         >
           <div className="flex flex-col md:flex-row gap-8">
@@ -194,13 +200,17 @@ const Details = () => {
           </div>
         </div>
 
-        {/* Play Button */}
+        {/* Play/Pause Button */}
         <div className="fixed right-8 bottom-8 z-20">
           <button 
-          className="bg-blue-400 hover:bg-[#04385d] transition-all duration-700 w-16 h-16 rounded-full flex items-center justify-center text-2xl"
-          onClick={() => setIsPlaying(true)}
+            className="bg-blue-400 hover:bg-[#04385d] transition-all duration-700 w-16 h-16 rounded-full flex items-center justify-center text-2xl"
+            onClick={togglePlay}
           >
-            <FaPlay className="ml-1"/>
+            {isPlaying ? (
+              <FaPause className="ml-0"/>
+            ) : (
+              <FaPlay className="ml-1"/>
+            )}
           </button>
         </div>
       </div>
