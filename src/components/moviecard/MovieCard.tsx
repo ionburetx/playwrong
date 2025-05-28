@@ -1,6 +1,17 @@
 import { Link } from 'react-router-dom';
 
-const MovieCard = ({ movie }) => {
+interface Movie {
+  id: number;
+  title: string;
+  overview: string;
+  poster_path: string;
+}
+
+interface MovieCardProps {
+  movie: Movie;
+}
+
+const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   const imageUrl = `https://image.tmdb.org/t/p/w342${movie.poster_path}`;
 
   return (
