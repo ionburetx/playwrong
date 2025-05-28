@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
-import { FaPlay, FaPause, FaTimes } from 'react-icons/fa';
+import { FaPlay, FaPause, FaTimes, FaUser } from 'react-icons/fa';
 import { useMovieStore } from '../store/moviesStore';
 
 
@@ -75,6 +75,24 @@ const Details = () => {
   const director = credits?.crew?.find(person => person.job === 'Director');
   const cast = credits?.cast?.slice(0, 10) || [];
   
+  const getProfileImage = (profilePath, size = "normal") => {
+    if (!profilePath) {
+      return (
+        <div className={`${size === "small" ? "w-16 h-16" : "w-32 h-32"} rounded-full bg-gray-700 flex items-center justify-center`}>
+          <FaUser className={`${size === "small" ? "w-8 h-8" : "w-16 h-16"} text-gray-400`} />
+        </div>
+      );
+    }
+
+    return (
+      <img
+        src={`https://image.tmdb.org/t/p/w200${profilePath}`}
+        alt="Profile"
+        className={`${size === "small" ? "w-16 h-16" : "w-32 h-32"} rounded-full object-cover`}
+      />
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="relative min-h-screen">
@@ -163,14 +181,7 @@ const Details = () => {
                 <div className="space-y-4">
                   <h2 className="text-2xl font-semibold">Director</h2>
                   <div className="flex items-center gap-4">
-                    <img
-                      src={`https://image.tmdb.org/t/p/w200${director.profile_path}`}
-                      alt={director.name}
-                      className="w-16 h-16 rounded-full object-cover"
-                      onError={(e) => {
-                        e.target.src = 'https://via.placeholder.com/200?text=No+Image'
-                      }}
-                    />
+                    {getProfileImage(director.profile_path, "small")}
                     <span className="text-lg">{director.name}</span>
                   </div>
                 </div>
@@ -184,15 +195,8 @@ const Details = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
               {cast.map(actor => (
                 <div key={actor.id} className="flex flex-col items-center text-center">
-                  <img
-                    src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
-                    alt={actor.name}
-                    className="w-32 h-32 rounded-full object-cover mb-2"
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/200?text=No+Image'
-                    }}
-                  />
-                  <p className="font-medium">{actor.name}</p>
+                  {getProfileImage(actor.profile_path)}
+                  <p className="font-medium mt-2">{actor.name}</p>
                   <p className="text-sm text-gray-400">{actor.character}</p>
                 </div>
               ))}
