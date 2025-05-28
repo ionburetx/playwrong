@@ -1,41 +1,56 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMoviesByGenre, getGenres } from '../services/api';
 import MovieCard from '../components/moviecard/MovieCard';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
+import { useMovieStore } from '../store/moviesStore';
 
 const Genre = () => {
   const { genreId } = useParams();
-  const [movies, setMovies] = useState([]);
-  const [genreName, setGenreName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  const { 
+    fetchMoviesByGenre, 
+    getMoviesFromCache,
+    getGenreName,
+    genres,
+    fetchGenres
+  } = useMovieStore();
 
   useEffect(() => {
-    const fetchMoviesAndGenre = async () => {
+    const loadContent = async () => {
       try {
         setLoading(true);
-        // Obtener el nombre del género
-        const genres = await getGenres();
-        const genre = genres.find(g => g.id === parseInt(genreId));
-        setGenreName(genre?.name || 'Género');
+        
+        // First fetch genres if we don't have them
+        if (genres.length === 0) {
+          await fetchGenres();
+        }
 
-        // Obtener las películas del género
-        const moviesData = await getMoviesByGenre(genreId);
-        setMovies(moviesData);
+        // Check if we need to fetch movies
+        const cachedMovies = getMoviesFromCache(genreId);
+        if (!cachedMovies?.length) {
+          await fetchMoviesByGenre(genreId);
+        }
       } catch (err) {
         setError(err.message);
+        console.error('Error loading genre content:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMoviesAndGenre();
-  }, [genreId]);
+    loadContent();
+  }, [genreId, fetchMoviesByGenre, getMoviesFromCache, fetchGenres, genres.length]);
 
-  if (loading) return <Loading />;
+  // Get movies from cache and genre name
+  const movies = getMoviesFromCache(genreId) || [];
+  const genreName = genres.length > 0 ? getGenreName(genreId) : '';
+
+  if (loading && (!movies.length || !genres.length)) return <Loading />;
   if (error) return <Error message={error} />;
+  if (!genreName) return <Error message="Genre not found" />;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

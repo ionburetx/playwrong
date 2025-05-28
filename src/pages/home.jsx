@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import TrendingList from '../components/TrendingList';
 import MovieCard from '../components/moviecard/MovieCard';
 import Loading from '../components/Loading';
@@ -6,31 +6,67 @@ import Error from '../components/Error';
 import { useMovieStore } from '../store/moviesStore';
 
 const Home = () => {
-  const { 
-    moviesByGenre,
-    loading,
-    error,
-    fetchMoviesByGenre
-  } = useMovieStore();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { fetchMoviesByGenre, getMoviesFromCache } = useMovieStore();
+
+  // Memoize the loadMovies function
+  const loadMovies = useCallback(async () => {
+    // If we're already loading, don't start another load
+    if (!loading) return;
+
+    try {
+      const genres = ['18', '35', '878'];
+      const fetchNeeded = genres.some(genreId => {
+        const cached = getMoviesFromCache(genreId);
+        return !cached?.length;
+      });
+
+      // Only proceed if we actually need to fetch
+      if (fetchNeeded) {
+        // Check cache first for each genre
+        const dramaCache = getMoviesFromCache('18');
+        const comedyCache = getMoviesFromCache('35');
+        const fictionCache = getMoviesFromCache('878');
+
+        // Create an array of promises only for genres that need fetching
+        const fetchPromises = [];
+        
+        if (!dramaCache?.length) {
+          fetchPromises.push(fetchMoviesByGenre('18'));
+        }
+        if (!comedyCache?.length) {
+          fetchPromises.push(fetchMoviesByGenre('35'));
+        }
+        if (!fictionCache?.length) {
+          fetchPromises.push(fetchMoviesByGenre('878'));
+        }
+
+        // Only fetch if we need to
+        if (fetchPromises.length > 0) {
+          await Promise.all(fetchPromises);
+        }
+      }
+    } catch (err) {
+      setError(err.message);
+      console.error('Error loading movies:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchMoviesByGenre, getMoviesFromCache, loading]);
 
   useEffect(() => {
-    const fetchAllGenres = async () => {
-      try {
-        // Fetch movies for each genre (28=Action, 18=Drama, 35=Comedy)
-        await Promise.all([
-          fetchMoviesByGenre('28'),
-          fetchMoviesByGenre('18'),
-          fetchMoviesByGenre('35')
-        ]);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-      }
-    };
+    loadMovies();
+  }, [loadMovies]);
 
-    fetchAllGenres();
-  }, [fetchMoviesByGenre]);
+  // Get movies from cache
+  const dramaMovies = getMoviesFromCache('18')?.slice(0, 8) || [];
+  const comedyMovies = getMoviesFromCache('35')?.slice(0, 8) || [];
+  const fictionMovies = getMoviesFromCache('878')?.slice(0, 8) || [];
 
-  if (loading && Object.keys(moviesByGenre).length === 0) return <Loading />;
+  if (loading && (!dramaMovies.length || !comedyMovies.length || !fictionMovies.length)) {
+    return <Loading />;
+  }
   if (error) return <Error message={error} />;
 
   return (
@@ -38,31 +74,31 @@ const Home = () => {
       <TrendingList />
       
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-12">
-        {/* Sección de Acción */}
-        <section className="movie-section">
-          <h2 className="text-3xl font-bold mb-6">Acción</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {moviesByGenre['28']?.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
-          </div>
-        </section>
-
-        {/* Sección de Drama */}
-        <section className="movie-section">
+        {/* Drama Section */}
+        <section>
           <h2 className="text-3xl font-bold mb-6">Drama</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {moviesByGenre['18']?.map((movie) => (
+            {dramaMovies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </div>
         </section>
 
-        {/* Sección de Comedia */}
-        <section className="movie-section">
+        {/* Comedy Section */}
+        <section>
           <h2 className="text-3xl font-bold mb-6">Comedia</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {moviesByGenre['35']?.map((movie) => (
+            {comedyMovies.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </div>
+        </section>
+
+        {/* Fiction Section */}
+        <section>
+          <h2 className="text-3xl font-bold mb-6">Ficción</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {fictionMovies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </div>
