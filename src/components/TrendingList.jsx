@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect, useCallback } from 'react';
+import { useMovieStore } from '../store/moviesStore';
 import MovieCardTrending from './MovieCardTrending';
 import Loading from './Loading.jsx';
 import Error from './Error';
@@ -11,28 +11,38 @@ import 'swiper/css/navigation';
 import 'swiper/css/effect-fade';
 
 const TrendingList = () => {
+  const { 
+    loading, 
+    error, 
+    fetchTrending, 
+    getTrendingFromCache,
+    trendingIds
+  } = useMovieStore();
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchTrending = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/trending/movie/day?api_key=${import.meta.env.VITE_TMDB_API_KEY}`
-        );
-        setMovies(response.data.results);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
+    // If we already have trending movies in cache, use them
+    const cachedMovies = getTrendingFromCache();
+    if (cachedMovies.length > 0) {
+      setMovies(cachedMovies);
+      return;
+    }
 
-    fetchTrending();
-  }, []);
+    // Only fetch if we don't have movies in cache
+    if (!trendingIds.length) {
+      fetchTrending().catch(console.error);
+    }
+  }, [fetchTrending, getTrendingFromCache, trendingIds]);
 
-  if (loading) return <Loading />;
+  // Update movies when trending cache changes
+  useEffect(() => {
+    const cachedMovies = getTrendingFromCache();
+    if (cachedMovies.length > 0) {
+      setMovies(cachedMovies);
+    }
+  }, [getTrendingFromCache, trendingIds]);
+
+  if (loading && movies.length === 0) return <Loading />;
   if (error) return <Error message={error} />;
 
   return (

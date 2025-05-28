@@ -4,6 +4,8 @@ import api from '../services/api';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import { FaPlay, FaTimes } from 'react-icons/fa';
+import { useMovieStore } from '../store/moviesStore';
+
 
 const Details = () => {
   const navigate = useNavigate();
@@ -18,6 +20,15 @@ const Details = () => {
   const handleClose = () => {
     navigate(-1);
   };
+  //const [movie, setMovie] = useState(null);
+  const [genreNames, setGenreNames] = useState([]);
+  
+  const { 
+    fetchMovieDetails,
+    fetchGenres,
+    getMovieGenreNames,
+    genres
+  } = useMovieStore();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -42,6 +53,7 @@ const Details = () => {
         }
       } catch (err) {
         setError(err.message);
+        console.error('Error loading movie details:', err);
       } finally {
         setLoading(false);
       }
@@ -50,9 +62,9 @@ const Details = () => {
     fetchMovieAndCredits();
   }, [id]);
 
-  if (loading) return <Loading />;
-  if (error) return <Error message={error} />;
-  if (!movie) return <Error message="Película no encontrada" />;
+    if (loading) return <Loading />;
+    if (error) return <Error message={error} />;
+    if (!movie) return <Error message="Película no encontrada" />;
 
   const director = credits?.crew?.find(person => person.job === 'Director');
   const cast = credits?.cast?.slice(0, 10) || [];
