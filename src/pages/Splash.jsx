@@ -80,3 +80,5 @@ const Splash = () => {
     </div>
   );
 };
+
+export default Splash;
