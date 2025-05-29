@@ -1,22 +1,44 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, FC } from 'react';
 import TrendingList from '../components/TrendingList';
-import MovieCard from '../components/moviecard/MovieCard';
-import Loading from '../components/Loading';
-import Error from '../components/Error';
+import MovieCard from '../components/moviecard/MovieCard.jsx';
+import Loading from '../components/Loading.tsx';
+import Error from '../components/Error.tsx';
 import { useMovieStore } from '../store/moviesStore';
 
-const Home = () => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  vote_average: number;
+  release_date: string;
+  overview: string;
+}
+
+interface ErrorWithMessage {
+  message: string;
+}
+
+const isErrorWithMessage = (error: unknown): error is ErrorWithMessage => {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    typeof (error as Record<string, unknown>).message === 'string'
+  );
+};
+
+const Home: FC = () => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const { fetchMoviesByGenre, getMoviesFromCache } = useMovieStore();
 
   // Memoize the loadMovies function
-  const loadMovies = useCallback(async () => {
+  const loadMovies = useCallback(async (): Promise<void> => {
     // If we're already loading, don't start another load
     if (!loading) return;
 
     try {
-      const genres = ['18', '35', '878'];
+      const genres: string[] = ['18', '35', '878'];
       const fetchNeeded = genres.some(genreId => {
         const cached = getMoviesFromCache(genreId);
         return !cached?.length;
@@ -30,7 +52,7 @@ const Home = () => {
         const fictionCache = getMoviesFromCache('878');
 
         // Create an array of promises only for genres that need fetching
-        const fetchPromises = [];
+        const fetchPromises: Promise<void>[] = [];
         
         if (!dramaCache?.length) {
           fetchPromises.push(fetchMoviesByGenre('18'));
@@ -47,9 +69,17 @@ const Home = () => {
           await Promise.all(fetchPromises);
         }
       }
-    } catch (err) {
-      setError(err.message);
-      console.error('Error loading movies:', err);
+    } catch (error: unknown) {
+      let errorMessage: string;
+      if (isErrorWithMessage(error)) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      } else {
+        errorMessage = 'An unknown error occurred';
+      }
+      setError(errorMessage);
+      console.error('Error loading movies:', error);
     } finally {
       setLoading(false);
     }
@@ -60,9 +90,9 @@ const Home = () => {
   }, [loadMovies]);
 
   // Get movies from cache
-  const dramaMovies = getMoviesFromCache('18')?.slice(0, 8) || [];
-  const comedyMovies = getMoviesFromCache('35')?.slice(0, 8) || [];
-  const fictionMovies = getMoviesFromCache('878')?.slice(0, 8) || [];
+  const dramaMovies: Movie[] = getMoviesFromCache('18')?.slice(0, 8) || [];
+  const comedyMovies: Movie[] = getMoviesFromCache('35')?.slice(0, 8) || [];
+  const fictionMovies: Movie[] = getMoviesFromCache('878')?.slice(0, 8) || [];
 
   if (loading && (!dramaMovies.length || !comedyMovies.length || !fictionMovies.length)) {
     return <Loading />;
@@ -108,4 +138,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Home; 

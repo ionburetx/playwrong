@@ -1,8 +1,8 @@
 import { useState, useEffect, FC } from 'react';
 import { useParams, Params } from 'react-router-dom';
 import MovieCard from '../components/moviecard/MovieCard';
-import Loading from '../components/Loading';
-import Error from '../components/Error';
+import Loading from '../components/Loading.tsx';
+import Error from '../components/Error.tsx';
 import { useMovieStore } from '../store/moviesStore';
 
 interface TMDBMovie {
@@ -27,6 +27,26 @@ type Movie = Pick<TMDBMovie, 'id' | 'title' | 'poster_path'> & Partial<TMDBMovie
 
 interface GenreRouteParams extends Params {
   genreId: string;
+}
+
+interface ErrorWithMessage {
+  message: string;
+}
+
+function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    typeof (error as Record<string, unknown>).message === 'string'
+  );
+}
+
+function getErrorMessage(error: unknown) {
+  if (isErrorWithMessage(error)) return error.message;
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return 'An unknown error occurred';
 }
 
 const Genre: FC = () => {
@@ -57,9 +77,9 @@ const Genre: FC = () => {
         if (!cachedMovies?.length) {
           await fetchMoviesByGenre(genreId);
         }
-      } catch (err) {
-        setError(err.message);
-        console.error('Error loading genre content:', err);
+      } catch (error: unknown) {
+        setError(getErrorMessage(error));
+        console.error('Error loading genre content:', error);
       } finally {
         setLoading(false);
       }

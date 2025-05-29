@@ -16,7 +16,7 @@ async function enableMocking() {
 // Inicializar la aplicación
 const startApp = async () => {
   //await enableMocking()
-  const root = createRoot(document.getElementById('root'))
+  const root = createRoot(document.getElementById('root')!)
   
   root.render(
     <React.StrictMode>

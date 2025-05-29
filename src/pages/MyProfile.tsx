@@ -1,7 +1,14 @@
-import React from 'react';
-    
-const MyProfile = () => {
-    const profileData = {
+import { FC } from 'react';
+
+interface ProfileData {
+    name: string;
+    email: string;
+    role: string;
+    bio: string;
+}
+
+const MyProfile: FC = () => {
+    const profileData: ProfileData = {
         name: 'John Doe',
         email: 'john@example.com',
         role: 'Software Developer',
@@ -26,4 +33,4 @@ const MyProfile = () => {
     );
 };
 
-export default MyProfile;
+export default MyProfile; 

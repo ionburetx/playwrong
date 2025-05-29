@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from './App';
-import Home from "./pages/home";
+import Home from "./pages/Home.tsx";
 import Details from "./pages/Details";
 import Genre from './pages/Genre';
-import ProtectedRoute from "./components/ProtectedRoute";
-import MyProfile from "./pages/MyProfile";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import MyProfile from "./pages/MyProfile.tsx";
 import Search from './pages/Search';
 import Splash from "./pages/splash";
 
