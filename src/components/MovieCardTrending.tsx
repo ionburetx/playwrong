@@ -1,6 +1,19 @@
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-const MovieCardTrending = ({ movie, isTrending }) => {
+interface Movie {
+  id: number;
+  title: string;
+  backdrop_path: string;
+  overview: string;
+}
+
+interface MovieCardTrendingProps {
+  movie: Movie;
+  isTrending: boolean;
+}
+
+const MovieCardTrending: FC<MovieCardTrendingProps> = ({ movie, isTrending }) => {
   const imageBaseUrl = "https://image.tmdb.org/t/p/";
   const imageSize = isTrending ? 'original' : 'w342';
 

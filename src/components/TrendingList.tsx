@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, FC } from 'react';
 import { useMovieStore } from '../store/moviesStore';
 import MovieCardTrending from './MovieCardTrending';
-import Loading from './Loading.jsx';
+import Loading from './Loading';
 import Error from './Error';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, EffectFade, Autoplay } from 'swiper/modules';
@@ -10,7 +10,14 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-fade';
 
-const TrendingList = () => {
+interface Movie {
+  id: number;
+  title: string;
+  backdrop_path: string;
+  overview: string;
+}
+
+const TrendingList: FC = () => {
   const { 
     loading, 
     error, 
@@ -18,7 +25,7 @@ const TrendingList = () => {
     getTrendingFromCache,
     trendingIds
   } = useMovieStore();
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
     // If we already have trending movies in cache, use them
