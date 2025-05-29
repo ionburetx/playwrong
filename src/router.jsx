@@ -17,7 +17,11 @@ export default function Router() {
           <Route path="/home" element={<Home />} />
           <Route path="/movie/:id" element={<Details />} />
           <Route path="/genre/:genreId" element={<Genre />} />
-          <Route path="/myprofile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
+          <Route path="/myprofile" element={
+            <ProtectedRoute>
+              <MyProfile />
+            </ProtectedRoute>
+          } />
           <Route path="/search" element={<Search />} />
         </Route>
       </Routes>

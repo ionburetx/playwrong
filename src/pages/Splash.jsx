@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectFade, Autoplay } from 'swiper/modules';
 import api from '../services/api';
-import groupLogo from '../assets/Group.png';
+import medallon from '../assets/medallon.png';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 
@@ -50,6 +50,9 @@ const Splash = () => {
           }}
           speed={20}
           loop={true}
+          slidesPerView={1}  // Añadido: asegura que solo se muestra 1 slide a la vez
+          slidesPerGroup={1}  // Añadido: mueve las slides de 1 en 1
+          loopedSlides={2} 
           className="w-full h-full"
         >
           {movies.map((movie) => (
@@ -68,9 +71,9 @@ const Splash = () => {
 
       <div className="absolute inset-0 flex items-center justify-center z-10">
         <img 
-          src={groupLogo} 
+          src={medallon} 
           alt="PlayWrong Logo"
-          className="w-96 h-96 object-contain animate-grow"
+          className="w-96 h-96 object-contain animate-grow will-change-transform"
         />
       </div>
 
