@@ -36,11 +36,11 @@ const Header: FC = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
-            <img src={logo} alt="Logo" className="h-8 md:h-12" />
+            <img src={logo} alt="Logo" className="h-6 md:h-12" />
           </Link>
 
           {/* Barra de búsqueda - Desktop */}
-          <div className="hidden md:block max-w-xl w-full mx-4 bg-yellow-500">
+          <div className="hidden md:block max-w-xl w-full mx-4">
             <SearchBar onSearch={handleSearch} />
           </div>
           {/* Barra de búsqueda - Móvil */}
