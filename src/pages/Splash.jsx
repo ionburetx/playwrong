@@ -11,27 +11,26 @@ const Splash = () => {
   const navigate = useNavigate();
   const [isOverlayActive, setIsOverlayActive] = useState(false);
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [showMovies, setShowMovies] = useState(false);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        setLoading(true);
         const response = await api.get('/movie/popular');
         setMovies(response.data.results.slice(0, 8));
+        // Mostramos las películas después de un pequeño delay
+        setTimeout(() => setShowMovies(true), 100);
       } catch (error) {
         console.error('Error fetching movies:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchMovies();
 
-    const overlayTimer = setTimeout(() => setIsOverlayActive(true), 5000);
+    const overlayTimer = setTimeout(() => setIsOverlayActive(true), 4000);
     const navigationTimer = setTimeout(() => {
       navigate('/home');
-    }, 6000);
+    }, 5000);
 
     return () => {
       clearTimeout(overlayTimer);
@@ -39,35 +38,33 @@ const Splash = () => {
     };
   }, [navigate]);
 
-  if (loading || movies.length === 0) {
-    return <div className="fixed inset-0 bg-black"></div>;
-  }
-
   return (
     <div className="fixed inset-0 overflow-hidden bg-black">
-      <Swiper
-        modules={[EffectFade, Autoplay]}
-        effect="fade"
-        autoplay={{
-          delay: 150,
-          disableOnInteraction: false,
-        }}
-        speed={20}
-        loop={true}
-        className="w-full h-full"
-      >
-        {movies.map((movie) => (
-          <SwiperSlide key={movie.id}>
-            <div className="relative w-full h-full">
-              <img 
-                src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                alt={movie.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      {showMovies && movies.length > 0 && (
+        <Swiper
+          modules={[EffectFade, Autoplay]}
+          effect="fade"
+          autoplay={{
+            delay: 150,
+            disableOnInteraction: false,
+          }}
+          speed={20}
+          loop={true}
+          className="w-full h-full"
+        >
+          {movies.map((movie) => (
+            <SwiperSlide key={movie.id}>
+              <div className="relative w-full h-full">
+                <img 
+                  src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                  alt={movie.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
 
       <div className="absolute inset-0 flex items-center justify-center z-10">
         <img 
@@ -83,5 +80,3 @@ const Splash = () => {
     </div>
   );
 };
-
-export default Splash;
