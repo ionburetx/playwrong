@@ -1,8 +1,8 @@
 import { useState, useEffect, FC } from 'react';
 import { useMovieStore } from '../store/moviesStore';
 import MovieCardTrending from './MovieCardTrending';
-import Loading from './Loading';
-import Error from './Error';
+import Loading from './Loading.tsx';
+import Error from './Error.tsx';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, EffectFade, Autoplay } from 'swiper/modules';
 

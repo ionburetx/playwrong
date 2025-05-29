@@ -1,8 +1,8 @@
 import { useState, useEffect, FC } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import MovieCard from '../components/moviecard/MovieCard';
-import Loading from '../components/Loading';
-import Error from '../components/Error';
+import Loading from '../components/Loading.tsx';
+import Error from '../components/Error.tsx';
 import api from '../services/api';
 
 interface Movie {
@@ -10,6 +10,26 @@ interface Movie {
   title: string;
   poster_path: string;
   overview: string;
+}
+
+interface ErrorWithMessage {
+  message: string;
+}
+
+function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    typeof (error as Record<string, unknown>).message === 'string'
+  );
+}
+
+function getErrorMessage(error: unknown) {
+  if (isErrorWithMessage(error)) return error.message;
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return 'An unknown error occurred';
 }
 
 const Search: FC = () => {
@@ -27,8 +47,8 @@ const Search: FC = () => {
         setLoading(true);
         const response = await api.get(`/search/movie?query=${encodeURIComponent(query)}`);
         setMovies(response.data.results);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (error: unknown) {
+        setError(getErrorMessage(error));
       } finally {
         setLoading(false);
       }
