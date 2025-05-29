@@ -60,6 +60,7 @@ export const useMovieStore = create((set, get) => ({
   // Fetch and cache all genres
   fetchGenres: async () => {
     const state = get();
+
     // Return cached genres if we have them
     if (state.genres.length > 0) {
       console.log('Using cached genres');
@@ -68,16 +69,19 @@ export const useMovieStore = create((set, get) => ({
 
     // Don't fetch if we're already loading
     if (state.loadingGenres) {
-      console.log('Already loading genres');
-      return state.genres;
+      console.log('Already loading genres, waiting...');
+      //return state.genres;
     }
 
     try {
       console.log('Fetching genres from API');
-      set({ loadingGenres: true });
+      set({ loadingGenres: true, error: null });
       const response = await api.get('/genre/movie/list');
       const genres = response.data.genres;
-      set({ genres, loadingGenres: false });
+      set((state) => ({ 
+        genres, 
+        loadingGenres: false 
+      }));
       return genres;
     } catch (error) {
       console.error('Error fetching genres:', error);
