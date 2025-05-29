@@ -1,24 +1,29 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useState } from "react";
+import { useAuth0, LogoutOptions } from "@auth0/auth0-react";
+import { useState, FC } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import logo from '../assets/logo.png';
 import SearchBar from './SearchBar';
 
-export default function Header() {
-  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
-  const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+interface User {
+  name: string;
+  picture: string;
+}
 
-  const handleSearch = (query) => {
+const Header: FC = () => {
+  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0<User>();
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+  const handleSearch = (query: string): void => {
     navigate(`/search?q=${encodeURIComponent(query)}`);
     setIsMenuOpen(false);
   };
 
-  const handleAuthClick = () => {
+  const handleAuthClick = (): void => {
     setIsMenuOpen(false);
     if (isAuthenticated) {
-      logout({ returnTo: window.location.origin });
+      logout({ logoutParams: { returnTo: window.location.origin } });
     } else {
       loginWithRedirect();
     }
@@ -68,7 +73,7 @@ export default function Header() {
 
             {/* Sección de Auth - Desktop */}
             <div className="flex items-center space-x-4">
-              {isAuthenticated && (
+              {isAuthenticated && user && (
                 <div className="flex items-center space-x-3">
                   <img 
                     src={user.picture} 
@@ -125,7 +130,7 @@ export default function Header() {
           </Link>
 
           {/* Sección de Auth - Móvil */}
-          {isAuthenticated && (
+          {isAuthenticated && user && (
             <>
               <div className="flex items-center space-x-3 py-2">
                 <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full" />
@@ -152,3 +157,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default Header; 
