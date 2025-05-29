@@ -1,16 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FC } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import MovieCard from '../components/moviecard/MovieCard';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import api from '../services/api';
 
-const Search = () => {
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  overview: string;
+}
+
+const Search: FC = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q');
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const searchMovies = async () => {
@@ -20,7 +27,7 @@ const Search = () => {
         setLoading(true);
         const response = await api.get(`/search/movie?query=${encodeURIComponent(query)}`);
         setMovies(response.data.results);
-      } catch (err) {
+      } catch (err: any) {
         setError(err.message);
       } finally {
         setLoading(false);
