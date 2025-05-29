@@ -40,9 +40,13 @@ const Header: FC = () => {
           </Link>
 
           {/* Barra de búsqueda - Desktop */}
-          <div className="hidden md:block max-w-xl w-full mx-4">
+          <div className="hidden md:block max-w-xl w-full mx-4 bg-yellow-500">
             <SearchBar onSearch={handleSearch} />
           </div>
+          {/* Barra de búsqueda - Móvil */}
+          {/* <div className="md:hidden mt-2 bg-red-500">
+            <SearchBar onSearch={handleSearch} />
+          </div> */}
 
           {/* Botón de menú móvil */}
           <button
@@ -94,10 +98,7 @@ const Header: FC = () => {
           </div>
         </div>
 
-        {/* Barra de búsqueda - Móvil */}
-        <div className="md:hidden mt-2">
-          <SearchBar onSearch={handleSearch} />
-        </div>
+        
       </div>
 
       {/* Menú Móvil */}
@@ -106,6 +107,11 @@ const Header: FC = () => {
           isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
         }`}
       >
+        {/* Barra de búsqueda - Móvil */}
+        <div className="md:hidden mt-2">
+          <SearchBar onSearch={handleSearch} />
+        </div>
+
         <nav className="flex flex-col p-4 space-y-4">
           <Link 
             to="/genre/18" 
