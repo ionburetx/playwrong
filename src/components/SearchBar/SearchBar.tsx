@@ -19,7 +19,7 @@ const SearchBar = ({ onSearch, placeholder = 'Buscar películas...' }: SearchBar
   return (
     <form 
       onSubmit={handleSubmit}
-      className="relative max-w-xl w-full mx-auto"
+      className="relative max-w-xl w-full mx-auto overflow-visible"
     >
       <div className="flex items-center gap-2">
         <div className="relative flex-grow">
@@ -28,7 +28,7 @@ const SearchBar = ({ onSearch, placeholder = 'Buscar películas...' }: SearchBar
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={placeholder}
-            className="w-full px-4 py-2 text-black bg-white border rounded-full focus:outline-none focus:border-blue-500"
+            className="w-full px-4 py-2 text-black bg-white border rounded-full shadow-md focus:outline-none focus:border-blue-500"
           />
         </div>
         <button

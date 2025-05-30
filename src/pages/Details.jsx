@@ -96,16 +96,16 @@ const Details = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="relative min-h-screen">
-        {/* Background Image/Video */}
+        {/* Imagen de fondo: fixed para cubrir toda la pantalla, incluso detrás del header */}
         {isPlaying && videoKey ? (
-          <div className="absolute inset-0 w-full h-full z-10 bg-black">
+          <div className="fixed inset-0 w-full h-full z-0 bg-black">
             <iframe
               ref={playerRef}
               src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=0&controls=1&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=1&playsinline=1`}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               frameBorder="0"
-              className="absolute top-1/2 left-1/2 w-[100vw] h-[100vh] -translate-x-1/2 -translate-y-1/2"
+              className="absolute top-0 left-0 w-full h-full object-cover"
               style={{
                 aspectRatio: '16/9',
                 minWidth: '100%',
@@ -119,13 +119,13 @@ const Details = () => {
           <img
             src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
             alt={movie.title}
-            className="w-full h-full absolute object-cover"
+            className="fixed top-0 left-0 w-full h-full object-cover z-0"
           />
         )}
 
-        <div className={`absolute inset-0 bg-black/60 ${isPlaying ? 'bg-opacity-30' : ''}`} />
-        <div className={`absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent ${isPlaying ? 'opacity-30' : ''}`} />
-
+        {/* Overlays ahora también fixed para cubrir toda la pantalla */}
+        <div className={`fixed inset-0 w-full h-full z-10 bg-black/60 ${isPlaying ? 'bg-opacity-30' : ''}`} />
+        <div className={`fixed inset-0 w-full h-full z-20 bg-gradient-to-t from-gray-900/80 to-transparent ${isPlaying ? 'opacity-30' : ''}`} />
 
         {/* Close Button */}
         <button
@@ -135,9 +135,9 @@ const Details = () => {
           <FaTimes className="w-8 h-8" />
         </button>
 
-        {/* Content */}
+        {/* Contenido principal: CON margen superior */}
         <div 
-          className={`relative z-10 container mx-auto px-4 py-8 transform transition-all duration-700 ease-in-out ${
+          className={`relative z-30 container mx-auto px-4 py-8 mt-24 ${
             isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
           }`}
         >
