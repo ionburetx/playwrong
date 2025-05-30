@@ -36,7 +36,7 @@ const Header: FC = () => {
         {/* Layout Principal */}
         <div className="flex items-center justify-start md:justify-between">
           {/* Logo */}
-          <Link to="/" className="flex-shrink-0">
+          <Link to="/home" className="flex-shrink-0">
             <img src={logo} alt="Logo" className="h-6 md:h-12" />
           </Link>
 
