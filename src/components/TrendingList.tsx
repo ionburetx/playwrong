@@ -5,6 +5,7 @@ import Loading from './Loading.tsx';
 import Error from './Error.tsx';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, EffectFade, Autoplay } from 'swiper/modules';
+import { useLocation } from 'react-router-dom';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -18,6 +19,7 @@ interface Movie {
 }
 
 const TrendingList: FC = () => {
+  const location = useLocation();
   const { 
     loading, 
     error, 
@@ -26,6 +28,12 @@ const TrendingList: FC = () => {
     trendingIds
   } = useMovieStore();
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [key, setKey] = useState(0); // Add a key to force remount
+
+  // Update key when location changes
+  useEffect(() => {
+    setKey(prev => prev + 1);
+  }, [location]);
 
   useEffect(() => {
     // If we already have trending movies in cache, use them
@@ -52,12 +60,15 @@ const TrendingList: FC = () => {
   if (loading && movies.length === 0) return <Loading />;
   if (error) return <Error message={error} />;
 
+  const randomInitialSlide = Math.floor(Math.random() * movies.length);
+
   return (
     <section className="w-full h-[calc(100vh-72px)] relative overflow-hidden">
       <h1 className="absolute top-8 ml-20 text-9xl font-bold text-white/80 z-10 tracking-wider opacity-0.8 -translate-x-full animate-[slideIn_1s_ease-out_forwards]">
         TRENDING
       </h1>
       <Swiper
+        key={key} // Force Swiper to remount with new random slide
         modules={[Navigation, EffectFade, Autoplay]}
         effect="fade"
         navigation
@@ -67,6 +78,7 @@ const TrendingList: FC = () => {
         }}
         speed={800}
         loop={true}
+        initialSlide={randomInitialSlide}
         className="w-full h-full"
       >
         {movies.map((movie) => (
