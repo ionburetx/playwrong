@@ -4,6 +4,7 @@ import { useState, FC } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import logo from '../assets/logo.png';
 import SearchBar from './SearchBar';
+import GenreLink from './GenreLink';
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 
 interface User {
@@ -83,15 +84,9 @@ const Header: FC = () => {
           {/* Navegación Desktop */}
           <div className="hidden md:flex items-center space-x-8">
             <nav className="flex space-x-8 text-lg">
-              <Link to="/genre/18" className="hover:text-gray-200 transition-colors">
-                Drama
-              </Link>
-              <Link to="/genre/35" className="hover:text-gray-200 transition-colors">
-                Comedia
-              </Link>
-              <Link to="/genre/878" className="hover:text-gray-200 transition-colors">
-                Ficción
-              </Link>
+              <GenreLink genreId="18" text="Drama" />
+              <GenreLink genreId="35" text="Comedia" />
+              <GenreLink genreId="878" text="Ficción" />
             </nav>
 
             {/* Sección de Auth - Desktop */}
@@ -133,27 +128,21 @@ const Header: FC = () => {
         </div>
 
         <nav className="flex flex-col p-4 space-y-4">
-          <Link 
-            to="/genre/18" 
-            className="hover:text-gray-200 py-2"
+          <GenreLink 
+            genreId="18" 
+            text="Drama" 
             onClick={() => setIsMenuOpen(false)}
-          >
-            Drama
-          </Link>
-          <Link 
-            to="/genre/35" 
-            className="hover:text-gray-200 py-2"
+          />
+          <GenreLink 
+            genreId="35" 
+            text="Comedia" 
             onClick={() => setIsMenuOpen(false)}
-          >
-            Comedia
-          </Link>
-          <Link 
-            to="/genre/878" 
-            className="hover:text-gray-200 py-2"
+          />
+          <GenreLink 
+            genreId="878" 
+            text="Ficción" 
             onClick={() => setIsMenuOpen(false)}
-          >
-            Ficción
-          </Link>
+          />
 
         </nav>
       </div>

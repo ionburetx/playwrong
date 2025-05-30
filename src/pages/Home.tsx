@@ -3,6 +3,7 @@ import TrendingList from '../components/TrendingList';
 import MovieCard from '../components/moviecard/MovieCard.jsx';
 import Loading from '../components/Loading.tsx';
 import Error from '../components/Error.tsx';
+import SectionHeader from '../components/SectionHeader';
 import { useMovieStore } from '../store/moviesStore';
 
 interface Movie {
@@ -106,7 +107,7 @@ const Home: FC = () => {
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-12">
         {/* Drama Section */}
         <section>
-          <h2 className="text-3xl font-bold mb-6">Drama</h2>
+          <SectionHeader text="Drama" />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {dramaMovies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
@@ -116,7 +117,7 @@ const Home: FC = () => {
 
         {/* Comedy Section */}
         <section>
-          <h2 className="text-3xl font-bold mb-6">Comedia</h2>
+          <SectionHeader text="Comedia" />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {comedyMovies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
@@ -126,7 +127,7 @@ const Home: FC = () => {
 
         {/* Fiction Section */}
         <section>
-          <h2 className="text-3xl font-bold mb-6">Ficción</h2>
+          <SectionHeader text="Ficción" />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {fictionMovies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
