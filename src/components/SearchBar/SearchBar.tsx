@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
+
 interface SearchBarProps {
   onSearch: (query: string) => void;
   placeholder?: string;
@@ -39,7 +40,7 @@ const SearchBar = ({ onSearch, placeholder = 'Buscar películas...' }: SearchBar
         </button>
         <button
           type="submit"
-          className="md:hidden text-white bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none flex items-center justify-center w-10 h-10"
+          className={`hover:bg-gray-200 md:hidden rounded-full hover:bg-blue-700 focus:outline-none flex items-center justify-center w-10 h-10`}
         >
           <FaSearch className="ml-0.5"/>
         </button>

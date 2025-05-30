@@ -143,16 +143,16 @@ const Header: FC = () => {
 
       {/* Menú Móvil */}
       <div 
-        className={`md:hidden absolute w-full bg-blue-400 shadow-lg transition-all duration-300 ease-in-out ${
+        className={`md:hidden absolute w-full  shadow-lg transition-all duration-300 ease-in-out ${
           isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
-        }`}
+        } ${isGenrePage ? 'text-black bg-gray-100' : 'text-white bg-gradient-to-r from-transparent to-black/70'}`}
       >
         {/* Barra de búsqueda - Móvil */}
         <div className="md:hidden mt-2">
           <SearchBar onSearch={handleSearch} />
         </div>
 
-        <nav className="flex flex-col p-4 space-y-4">
+        <nav className="flex flex-col p-4 space-y-4 text-right">
           <Link 
             to="/genre/18" 
             className="hover:text-gray-200 py-2"
