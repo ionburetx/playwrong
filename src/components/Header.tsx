@@ -30,7 +30,7 @@ const Header: FC = () => {
   };
 
   return (
-    <header className="bg-blue-400 text-white sticky top-0 z-50">
+    <header className="bg-transparent text-white absolute top-0 left-0 w-full z-50">
       <div className="px-4 md:px-8 py-3">
         {/* Layout Principal */}
         <div className="flex items-center justify-between">
@@ -164,4 +164,4 @@ const Header: FC = () => {
   );
 }
 
-export default Header; 
+export default Header;

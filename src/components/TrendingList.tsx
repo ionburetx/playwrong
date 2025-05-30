@@ -53,8 +53,8 @@ const TrendingList: FC = () => {
   if (error) return <Error message={error} />;
 
   return (
-    <section className="w-full h-[calc(100vh-72px)] relative overflow-hidden">
-      <h1 className="absolute top-8 ml-20 text-9xl font-bold text-white/80 z-10 tracking-wider opacity-0.8 -translate-x-full animate-[slideIn_1s_ease-out_forwards]">
+    <section className="w-full h-screen relative overflow-hidden">
+      <h1 className="absolute top-32 ml-20 text-9xl font-bold text-white/80 z-10 tracking-wider opacity-0.8 -translate-x-full animate-[slideIn_1s_ease-out_forwards]">
         TRENDING
       </h1>
       <Swiper
