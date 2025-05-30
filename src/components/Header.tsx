@@ -31,7 +31,9 @@ const Header: FC = () => {
 
   return (
     <header className="bg-transparent text-white absolute top-0 left-0 w-full z-50">
-      <div className="px-4 md:px-8 py-3">
+      {/* Overlay degradado negro semi-transparente */}
+      <div className="pointer-events-none absolute inset-0 h-full w-full bg-gradient-to-b from-black/70 to-transparent" />
+      <div className="relative px-4 md:px-8 py-3">
         {/* Layout Principal */}
         <div className="flex items-center justify-between">
           {/* Logo */}
