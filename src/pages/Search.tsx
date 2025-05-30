@@ -18,16 +18,16 @@ interface ErrorWithMessage {
 
 function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
   return (
-    typeof error === 'object' &&
-    error !== null &&
-    'message' in error &&
-    typeof (error as Record<string, unknown>).message === 'string'
+    error instanceof Error ||
+    (typeof error === 'object' &&
+      error !== null &&
+      'message' in error &&
+      typeof (error as Record<string, unknown>).message === 'string')
   );
 }
 
-function getErrorMessage(error: unknown) {
+function getErrorMessage(error: unknown): string {
   if (isErrorWithMessage(error)) return error.message;
-  if (error instanceof Error) return error.message;
   if (typeof error === 'string') return error;
   return 'An unknown error occurred';
 }

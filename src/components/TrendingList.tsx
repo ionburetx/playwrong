@@ -63,8 +63,8 @@ const TrendingList: FC = () => {
   const randomInitialSlide = Math.floor(Math.random() * movies.length);
 
   return (
-    <section className="w-full h-[calc(100vh-72px)] relative overflow-hidden">
-      <h1 className="absolute top-8 ml-11 md:ml-20 text-4xl md:text-9xl font-bold text-white/80 z-10 tracking-wider opacity-0.8 -translate-x-full animate-[slideIn_1s_ease-out_forwards]">
+    <section className="w-full h-screen relative overflow-hidden">
+      <h1 className="absolute top-32 ml-11 md:ml-20 text-4xl md:text-9xl font-bold text-white/80 z-10 tracking-wider opacity-0.8 -translate-x-full animate-[slideIn_1s_ease-out_forwards]">
         TRENDING
       </h1>
       <Swiper

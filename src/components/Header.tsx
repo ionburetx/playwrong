@@ -1,8 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth0, LogoutOptions } from "@auth0/auth0-react";
-import { useState, FC } from "react";
+import { useState, FC, useEffect } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import logo from '../assets/logo.png';
+import logonegro from '../assets/logonegro.png';
 import SearchBar from './SearchBar';
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 
@@ -14,7 +15,19 @@ interface User {
 const Header: FC = () => {
   const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0<User>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Añadir efecto para detectar scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleSearch = (query: string): void => {
     navigate(`/search?q=${encodeURIComponent(query)}`);
@@ -30,14 +43,21 @@ const Header: FC = () => {
     }
   };
 
+  // Detectar si estamos en la página Genre
+  const isGenrePage = location.pathname.startsWith('/genre');
+
   return (
-    <header className="bg-blue-400 text-white sticky top-0 z-50">
-      <div className="px-4 md:px-8 py-3">
+    <header className="bg-transparent text-white fixed top-0 left-0 w-full z-50">
+      {/* Overlay degradado solo si NO es Genre */}
+      {!isScrolled && !isGenrePage && (
+        <div className="pointer-events-none absolute inset-0 h-full w-full bg-gradient-to-b from-black/70 to-transparent" />
+      )}
+      <div className="relative px-4 md:px-8 py-3">
         {/* Layout Principal */}
         <div className="flex items-center justify-start md:justify-between">
           {/* Logo */}
           <Link to="/home" className="flex-shrink-0">
-            <img src={logo} alt="Logo" className="h-6 md:h-12" />
+            <img src={isGenrePage ? logonegro : logo} alt="Logo" className="h-6 md:h-12" />
           </Link>
 
           {/* Barra de búsqueda - Desktop */}
@@ -83,13 +103,13 @@ const Header: FC = () => {
           {/* Navegación Desktop */}
           <div className="hidden md:flex items-center space-x-8">
             <nav className="flex space-x-8 text-lg">
-              <Link to="/genre/18" className="hover:text-gray-200 transition-colors">
+              <Link to="/genre/18" className={`${isGenrePage ? 'text-black' : 'text-white'} hover:text-gray-400 transition-colors`}>
                 Drama
               </Link>
-              <Link to="/genre/35" className="hover:text-gray-200 transition-colors">
+              <Link to="/genre/35" className={`${isGenrePage ? 'text-black' : 'text-white'} hover:text-gray-400 transition-colors`}>
                 Comedia
               </Link>
-              <Link to="/genre/878" className="hover:text-gray-200 transition-colors">
+              <Link to="/genre/878" className={`${isGenrePage ? 'text-black' : 'text-white'} hover:text-gray-400 transition-colors`}>
                 Ficción
               </Link>
             </nav>
@@ -109,7 +129,7 @@ const Header: FC = () => {
               )}
               <button 
                 onClick={handleAuthClick}
-                className="bg-white hover:bg-gray-200 text-black px-4 py-2 rounded-lg font-semibold transition"
+                className={`${isGenrePage ? 'bg-black text-white' : 'bg-white text-black'} hover:bg-gray-200 px-4 py-2 rounded-lg font-semibold transition`}
               >
                 {isAuthenticated ? 'Logout' : 'Login'}
               </button>
@@ -162,4 +182,4 @@ const Header: FC = () => {
   );
 }
 
-export default Header; 
+export default Header;
