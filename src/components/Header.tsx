@@ -24,9 +24,9 @@ const Header: FC = () => {
   const handleAuthClick = (): void => {
     setIsMenuOpen(false);
     if (isAuthenticated) {
-      logout({ logoutParams: { returnTo: window.location.origin } });
+      logout({ logoutParams: { returnTo: window.location.origin + '/home' } });
     } else {
-      loginWithRedirect();
+      loginWithRedirect({ appState: { returnTo: '/home' } });
     }
   };
 
