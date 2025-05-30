@@ -4,6 +4,7 @@ import { useState, FC } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import logo from '../assets/logo.png';
 import SearchBar from './SearchBar';
+import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 
 interface User {
   name: string;
@@ -33,7 +34,7 @@ const Header: FC = () => {
     <header className="bg-blue-400 text-white sticky top-0 z-50">
       <div className="px-4 md:px-8 py-3">
         {/* Layout Principal */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-start md:justify-between">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
             <img src={logo} alt="Logo" className="h-6 md:h-12" />
@@ -49,6 +50,24 @@ const Header: FC = () => {
           </div> */}
 
           {/* Botón de menú móvil */}
+          <div className="md:hidden flex items-center space-x-4 ml-auto">
+              {isAuthenticated && user && (
+                <div className="flex items-center space-x-3">
+                  <Link to="/myprofile"><img 
+                    src={user.picture} 
+                    alt={user.name + ' perfil'}
+                    title={user.name + ' perfil'}
+                    className="w-8 h-8 rounded-full"
+                  /></Link>
+                </div>
+              )}
+              <button 
+                onClick={handleAuthClick}
+                className="bg-white hover:bg-gray-200 text-black px-4 py-2 rounded-lg font-semibold transition"
+              >
+                {isAuthenticated ? <FaSignOutAlt className="ml-0.5"/> : <FaSignInAlt className="ml-0.5"/>}
+              </button>
+            </div>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden p-2 rounded-lg hover:bg-blue-500"
@@ -96,6 +115,7 @@ const Header: FC = () => {
               </button>
             </div>
           </div>
+          
         </div>
 
         
@@ -135,29 +155,6 @@ const Header: FC = () => {
             Ficción
           </Link>
 
-          {/* Sección de Auth - Móvil */}
-          {isAuthenticated && user && (
-            <>
-              <div className="flex items-center space-x-3 py-2">
-                <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full" />
-                <span>Hola, {user.name}</span>
-              </div>
-              <Link 
-                to="/myprofile"
-                className="block py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Mi Perfil
-              </Link>
-            </>
-          )}
-          
-          <button 
-            onClick={handleAuthClick}
-            className="w-full bg-white hover:bg-gray-200 text-black px-4 py-2 rounded-lg font-semibold transition"
-          >
-            {isAuthenticated ? 'Logout' : 'Login'}
-          </button>
         </nav>
       </div>
     </header>
