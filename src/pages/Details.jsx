@@ -205,7 +205,7 @@ const Details = () => {
         </div>
 
         {/* Play/Pause Button */}
-        <div className="fixed right-8 bottom-8 z-20">
+        <div className="fixed right-8 bottom-8 z-[1001]">
           <button 
             className="bg-blue-400 hover:bg-[#04385d] transition-all duration-700 w-16 h-16 rounded-full flex items-center justify-center text-2xl"
             onClick={togglePlay}
