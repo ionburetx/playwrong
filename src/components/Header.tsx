@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth0, LogoutOptions } from "@auth0/auth0-react";
-import { useState, FC } from "react";
+import { useState, FC, useEffect } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import logo from '../assets/logo.png';
 import logonegro from '../assets/logonegro.png';
@@ -16,6 +16,17 @@ const Header: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Añadir efecto para detectar scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleSearch = (query: string): void => {
     navigate(`/search?q=${encodeURIComponent(query)}`);
@@ -35,9 +46,9 @@ const Header: FC = () => {
   const isGenrePage = location.pathname.startsWith('/genre');
 
   return (
-    <header className="bg-transparent text-white absolute top-0 left-0 w-full z-50">
+    <header className="bg-transparent text-white fixed top-0 left-0 w-full z-50">
       {/* Overlay degradado solo si NO es Genre */}
-      {!isGenrePage && (
+      {!isScrolled && !isGenrePage && (
         <div className="pointer-events-none absolute inset-0 h-full w-full bg-gradient-to-b from-black/70 to-transparent" />
       )}
       <div className="relative px-4 md:px-8 py-3">
