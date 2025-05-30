@@ -99,7 +99,7 @@ const Genre: FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Si tienes imagen de fondo, ponla aquí fuera del mt-24 */}
-      <div className="mt-24">
+      <div className="mt-12 md:mt-24">
         <h1 className="text-4xl font-bold mb-8 font-tilt-neon">{genreName}</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {movies.map((movie) => (
