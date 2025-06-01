@@ -53,6 +53,8 @@ const Genre: FC = () => {
   const { genreId } = useParams<'genreId'>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
   
   const { 
     fetchMoviesByGenre, 
@@ -73,6 +75,7 @@ const Genre: FC = () => {
 
         setLoading(true);
         setError(null);
+        setCurrentPage(1); // Reset page when genre changes
         
         // First ensure genres are loaded
         if (genres.length === 0) {
@@ -90,7 +93,7 @@ const Genre: FC = () => {
         const cachedMovies = getMoviesFromCache(genreId);
         if (!cachedMovies?.length) {
           console.log('No cached movies found for genre, fetching...', genreId);
-          await fetchMoviesByGenre(genreId);
+          await fetchMoviesByGenre(genreId, 1);
         }
       } catch (error: unknown) {
         const errorMsg = getErrorMessage(error);
@@ -107,6 +110,28 @@ const Genre: FC = () => {
 
     loadContent();
   }, [genreId, fetchMoviesByGenre, getMoviesFromCache, fetchGenres, genres.length]);
+
+  const handleLoadMore = async () => {
+    if (loadingMore) return;
+    
+    try {
+      setLoadingMore(true);
+      const nextPage = currentPage + 1;
+      const newMovies = await fetchMoviesByGenre(genreId, nextPage);
+      
+      // Only increment the page if we got new movies
+      if (newMovies.length > 0) {
+        setCurrentPage(nextPage);
+      } else {
+        setError("No more movies available for this genre");
+      }
+    } catch (error: unknown) {
+      const errorMsg = getErrorMessage(error);
+      setError(errorMsg);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   // Get movies from cache and genre name
   const movies: Movie[] = getMoviesFromCache(genreId) || [];
@@ -134,6 +159,21 @@ const Genre: FC = () => {
           {movies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
+        </div>
+        
+        {/* Load More Button */}
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={handleLoadMore}
+            disabled={loadingMore}
+            className={`text-white px-6 py-3 rounded-lg font-semibold transition ${
+              loadingMore 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-blue-600 hover:bg-blue-700'
+            }`}
+          >
+            {loadingMore ? 'Cargando...' : 'Ver más peliculas'}
+          </button>
         </div>
       </div>
     </div>

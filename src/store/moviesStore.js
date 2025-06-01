@@ -129,28 +129,38 @@ export const useMovieStore = create((set, get) => ({
   },
 
   // Fetch movies by genre
-  fetchMoviesByGenre: async (genreId) => {
+  fetchMoviesByGenre: async (genreId, page = 1) => {
     const state = get();
-    // If we're already loading this genre or have it cached, don't fetch again
-    if (state.loadingGenres[genreId] || state.genreMovies[genreId]?.length > 0) {
+    // Only check cache if it's the first page
+    if (page === 1 && (state.loadingGenres[genreId] || state.genreMovies[genreId]?.length > 0)) {
       return state.genreMovies[genreId]?.map(id => state.movies[id]) || [];
     }
 
     try {
-      // console.log('Fetching movies from API for genre:', genreId);
       set((state) => ({ 
         loadingGenres: { ...state.loadingGenres, [genreId]: true },
         error: null 
       }));
 
-      const response = await api.get(`/discover/movie?with_genres=${genreId}`);
+      const response = await api.get(`/discover/movie?with_genres=${genreId}&page=${page}`);
       
+      // Get existing movie IDs for this genre
+      const existingIds = state.genreMovies[genreId] || [];
+      
+      // Filter out movies that are already in our cache
+      const newMovies = response.data.results.filter(movie => !existingIds.includes(movie.id));
+      
+      // If all movies were duplicates, try the next page
+      if (newMovies.length === 0 && response.data.results.length > 0) {
+        // Recursively try the next page
+        return await get().fetchMoviesByGenre(genreId, page + 1);
+      }
+
       // Store all movies in our cache and keep track of IDs by genre
       const moviesUpdate = {};
-      const movieIds = [];
-      response.data.results.forEach(movie => {
+      const movieIds = newMovies.map(movie => {
         moviesUpdate[movie.id] = movie;
-        movieIds.push(movie.id);
+        return movie.id;
       });
 
       set((state) => ({
@@ -160,7 +170,7 @@ export const useMovieStore = create((set, get) => ({
         },
         genreMovies: {
           ...state.genreMovies,
-          [genreId]: movieIds
+          [genreId]: [...existingIds, ...movieIds]
         },
         loadingGenres: { 
           ...state.loadingGenres, 
@@ -168,7 +178,7 @@ export const useMovieStore = create((set, get) => ({
         }
       }));
 
-      return response.data.results;
+      return newMovies;
     } catch (error) {
       set((state) => ({ 
         loadingGenres: { ...state.loadingGenres, [genreId]: false },
