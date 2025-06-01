@@ -1,11 +1,11 @@
-import { useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC, useRef } from 'react';
 import { useMovieStore } from '../store/moviesStore';
 import MovieCardTrending from './MovieCardTrending';
 import Loading from './Loading.tsx';
 import Error from './Error.tsx';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, EffectFade, Autoplay } from 'swiper/modules';
-import { useLocation } from 'react-router-dom';
+import type { Swiper as SwiperType } from 'swiper';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -19,7 +19,6 @@ interface Movie {
 }
 
 const TrendingList: FC = () => {
-  const location = useLocation();
   const { 
     loading, 
     error, 
@@ -28,25 +27,27 @@ const TrendingList: FC = () => {
     trendingIds
   } = useMovieStore();
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [key, setKey] = useState(0); // Add a key to force remount
-
-  // Update key when location changes
-  useEffect(() => {
-    setKey(prev => prev + 1);
-  }, [location]);
+  const swiperRef = useRef<SwiperType | null>(null);
+  const initializedRef = useRef(false);
 
   useEffect(() => {
-    // If we already have trending movies in cache, use them
-    const cachedMovies = getTrendingFromCache();
-    if (cachedMovies.length > 0) {
-      setMovies(cachedMovies);
-      return;
-    }
+    const initializeMovies = async () => {
+      // If we already have trending movies in cache, use them
+      const cachedMovies = getTrendingFromCache();
+      if (cachedMovies.length > 0) {
+        setMovies(cachedMovies);
+        return;
+      }
 
-    // Only fetch if we don't have movies in cache
-    if (!trendingIds.length) {
-      fetchTrending().catch(console.error);
-    }
+      // Only fetch if we don't have movies in cache
+      if (!trendingIds.length) {
+        await fetchTrending().catch((error: unknown) => {
+          console.error('Error fetching trending movies:', error);
+        });
+      }
+    };
+
+    initializeMovies();
   }, [fetchTrending, getTrendingFromCache, trendingIds]);
 
   // Update movies when trending cache changes
@@ -57,10 +58,20 @@ const TrendingList: FC = () => {
     }
   }, [getTrendingFromCache, trendingIds]);
 
+  // Initialize swiper with random slide when movies are loaded
+  useEffect(() => {
+    if (movies.length > 0 && swiperRef.current && !initializedRef.current) {
+      const randomIndex = Math.floor(Math.random() * movies.length);
+      swiperRef.current.slideTo(randomIndex, 0);
+      initializedRef.current = true;
+    }
+  }, [movies]);
+
   if (loading && movies.length === 0) return <Loading />;
   if (error) return <Error message={error} />;
 
-  const randomInitialSlide = Math.floor(Math.random() * movies.length);
+  // Only enable loop if we have enough slides
+  const shouldEnableLoop = movies.length > 1;
 
   return (
     <section className="w-full h-screen relative overflow-hidden">
@@ -68,7 +79,6 @@ const TrendingList: FC = () => {
         TRENDING
       </h1>
       <Swiper
-        key={key} // Force Swiper to remount with new random slide
         modules={[Navigation, EffectFade, Autoplay]}
         effect="fade"
         navigation
@@ -77,9 +87,13 @@ const TrendingList: FC = () => {
           disableOnInteraction: false,
         }}
         speed={800}
-        loop={true}
-        initialSlide={randomInitialSlide}
+        loop={shouldEnableLoop}
+        slidesPerView={1}
+        slidesPerGroup={1}
         className="w-full h-full"
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
+        }}
       >
         {movies.map((movie) => (
           <SwiperSlide key={movie.id}>

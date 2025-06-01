@@ -22,7 +22,7 @@ export const useMovieStore = create((set, get) => ({
     }
 
     try {
-      console.log('Fetching trending movies');
+      // console.log('Fetching trending movies');
       set({ loadingTrending: true, error: null });
       
       const response = await api.get('/trending/movie/day');
@@ -53,7 +53,7 @@ export const useMovieStore = create((set, get) => ({
   // Get trending movies from cache
   getTrendingFromCache: () => {
     const state = get();
-    console.log('Getting trending movies from cache');
+    // console.log('Getting trending movies from cache');
     return state.trendingIds.map(id => state.movies[id]).filter(Boolean);
   },
 
@@ -61,20 +61,20 @@ export const useMovieStore = create((set, get) => ({
   fetchGenres: async () => {
     const state = get();
 
-    // Return cached genres if we have them
+    // If we have genres cached and they're not empty, use them
     if (state.genres.length > 0) {
-      console.log('Using cached genres');
+      // console.log('Using cached genres');
       return state.genres;
     }
 
-    // Don't fetch if we're already loading
+    // If we're already loading, wait
     if (state.loadingGenres) {
-      console.log('Already loading genres, waiting...');
-      //return state.genres;
+      // console.log('Already loading genres, waiting...');
+      return state.genres;
     }
 
     try {
-      console.log('Fetching genres from API');
+      // console.log('Fetching genres from API');
       set({ loadingGenres: true, error: null });
       const response = await api.get('/genre/movie/list');
       const genres = response.data.genres;
@@ -84,8 +84,8 @@ export const useMovieStore = create((set, get) => ({
       }));
       return genres;
     } catch (error) {
+      set({ error: error.message, loadingGenres: false });
       console.error('Error fetching genres:', error);
-      set({ loadingGenres: false });
       throw error;
     }
   },
@@ -96,14 +96,14 @@ export const useMovieStore = create((set, get) => ({
     const parsedId = parseInt(genreId);
     
     if (!parsedId) {
-      console.log('Invalid genre ID:', genreId);
-      return '';
+      // console.log('Invalid genre ID:', genreId);
+      return null;
     }
 
     const genre = state.genres.find(g => g.id === parsedId);
     if (!genre) {
-      console.log('Genre not found for ID:', genreId);
-      return 'Unknown Genre';
+      // console.log('Genre not found for ID:', genreId);
+      return null;
     }
 
     return genre.name;
@@ -128,7 +128,7 @@ export const useMovieStore = create((set, get) => ({
     }
 
     try {
-      console.log('Fetching movies from API for genre:', genreId);
+      // console.log('Fetching movies from API for genre:', genreId);
       set((state) => ({ 
         loadingGenres: { ...state.loadingGenres, [genreId]: true },
         error: null 
@@ -172,7 +172,7 @@ export const useMovieStore = create((set, get) => ({
   // Get movies for a specific genre from cache
   getMoviesFromCache: (genreId) => {
     const state = get();
-    console.log('Getting cached movies for genre:', genreId);
+    // console.log('Getting cached movies for genre:', genreId);
     
     // If we have cached IDs for this genre, return the corresponding movies
     if (state.genreMovies[genreId]?.length > 0) {
@@ -189,12 +189,12 @@ export const useMovieStore = create((set, get) => ({
     
     // Return cached data if available
     if (state.movies[movieId]) {
-      console.log('Returning cached movie:', movieId);
+      // console.log('Returning cached movie:', movieId);
       return state.movies[movieId];
     }
 
     try {
-      console.log('Fetching movie details from API:', movieId);
+      // console.log('Fetching movie details from API:', movieId);
       set({ loading: true, error: null });
       const response = await api.get(`/movie/${movieId}`);
       
@@ -217,13 +217,13 @@ export const useMovieStore = create((set, get) => ({
   // Get movie details from cache
   getMovieDetailsFromCache: (movieId) => {
     const movie = get().movies[movieId];
-    console.log('Getting movie from cache:', movieId, movie ? 'Found' : 'Not found');
+    // console.log('Getting movie from cache:', movieId, movie ? 'Found' : 'Not found');
     return movie || null;
   },
 
   // Clear cache
   clearCache: () => {
-    console.log('Clearing cache');
+    // console.log('Clearing cache');
     set({ 
       movies: {}, 
       genres: [], 
