@@ -145,7 +145,7 @@ const Header: FC = () => {
       <div 
         className={`md:hidden absolute w-full  shadow-lg transition-all duration-300 ease-in-out ${
           isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
-        } ${isGenrePage ? 'text-black bg-gray-100' : 'text-white bg-gradient-to-r from-transparent to-black/70'}`}
+        } ${isGenrePage ? 'text-black bg-gradient-to-r from-transparent to-gray-100/70' : 'text-white bg-gradient-to-r from-transparent to-black/70'}`}
       >
         {/* Barra de búsqueda - Móvil */}
         <div className="md:hidden mt-2">
