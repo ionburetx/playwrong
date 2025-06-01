@@ -60,32 +60,41 @@ export const useMovieStore = create((set, get) => ({
   // Fetch and cache all genres
   fetchGenres: async () => {
     const state = get();
+    console.log('fetchGenres called. Current state:', {
+      genresLength: state.genres.length,
+      loadingGenres: state.loadingGenres
+    });
 
     // If we have genres cached and they're not empty, use them
     if (state.genres.length > 0) {
-      // console.log('Using cached genres');
+      console.log('Using cached genres');
       return state.genres;
     }
 
-    // If we're already loading, wait
+    // Reset loading state if it was stuck
     if (state.loadingGenres) {
-      // console.log('Already loading genres, waiting...');
-      return state.genres;
+      console.log('Found stale loadingGenres state, resetting it');
+      set({ loadingGenres: false });
     }
 
     try {
-      // console.log('Fetching genres from API');
+      console.log('Starting genre fetch from API');
       set({ loadingGenres: true, error: null });
+      
       const response = await api.get('/genre/movie/list');
+      console.log('API response received:', response.data);
+      
       const genres = response.data.genres;
-      set((state) => ({ 
-        genres, 
-        loadingGenres: false 
-      }));
+      if (!genres || !Array.isArray(genres)) {
+        throw new Error('Invalid genres data received from API');
+      }
+      
+      console.log('Setting genres in store:', genres);
+      set({ genres, loadingGenres: false });
       return genres;
     } catch (error) {
-      set({ error: error.message, loadingGenres: false });
-      console.error('Error fetching genres:', error);
+      console.error('Error in fetchGenres:', error);
+      set({ error: error.message, loadingGenres: false, genres: [] });
       throw error;
     }
   },

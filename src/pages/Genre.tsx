@@ -65,22 +65,42 @@ const Genre: FC = () => {
   useEffect(() => {
     const loadContent = async () => {
       try {
+        console.log('Genre component loadContent started', {
+          genreId,
+          hasGenres: genres.length > 0,
+          loading
+        });
+
         setLoading(true);
+        setError(null);
         
-        // First fetch genres if we don't have them
+        // First ensure genres are loaded
         if (genres.length === 0) {
-          await fetchGenres();
+          console.log('No genres found, fetching them...');
+          try {
+            await fetchGenres();
+            console.log('Genres fetched successfully, current genres:', genres);
+          } catch (error: unknown) {
+            console.error('Failed to fetch genres:', error);
+            throw error;
+          }
         }
 
-        // Check if we need to fetch movies
+        // Then fetch movies if needed
         const cachedMovies = getMoviesFromCache(genreId);
         if (!cachedMovies?.length) {
+          console.log('No cached movies found for genre, fetching...', genreId);
           await fetchMoviesByGenre(genreId);
         }
       } catch (error: unknown) {
-        setError(getErrorMessage(error));
-        console.error('Error loading genre content:', error);
+        const errorMsg = getErrorMessage(error);
+        console.error('Error in loadContent:', errorMsg);
+        setError(errorMsg);
       } finally {
+        console.log('loadContent completed', {
+          hasGenres: genres.length > 0,
+          hasError: error !== null
+        });
         setLoading(false);
       }
     };
@@ -92,8 +112,17 @@ const Genre: FC = () => {
   const movies: Movie[] = getMoviesFromCache(genreId) || [];
   const genreName: string = genres.length > 0 ? getGenreName(genreId) : '';
 
-  if (loading && (!movies.length || !genres.length)) return <Loading />;
+  console.log('Genre component render state:', {
+    loading,
+    hasError: error !== null,
+    genresLength: genres.length,
+    hasGenreName: !!genreName,
+    moviesLength: movies.length
+  });
+
+  if (loading) return <Loading />;
   if (error) return <Error message={error} />;
+  if (genres.length === 0) return <Error message="Failed to load genres" />;
   if (!genreName) return <Error message="Genre not found" />;
 
   return (
