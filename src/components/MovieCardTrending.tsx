@@ -24,7 +24,7 @@ const MovieCardTrending: FC<MovieCardTrendingProps> = ({ movie, isTrending }) =>
         alt={movie.title}
         className="w-full h-full object-cover"
       />
-      <div className="absolute inset-0 flex items-center md:items-start bg-gradient-to-r from-black to-transparent">
+      <div className="absolute inset-0 flex items-center md:items-start bg-gradient-to-r from-black to-transparent font-tilt-neon">
         <div className="p-4 ml-4 md:p-8 md:pl-0 md:ml-16 max-w-2xl md:mt-[35vh]">
           <h3 className="md:text-4xl font-bold text-white mb-4 ml-4 md:ml-4 opacity-0 animate-[fadeIn_1s_ease-out_0.5s_forwards]">{movie.title}</h3>
           {isTrending && (

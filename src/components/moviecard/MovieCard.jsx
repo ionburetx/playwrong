@@ -5,7 +5,7 @@ const MovieCard = ({ movie }) => {
 
   return (
     <div className="relative group">
-      <div className="relative overflow-hidden rounded-lg transform transition-transform duration-300 group-hover:scale-105">
+      <div className="relative overflow-hidden rounded-lg transform transition-transform duration-300 group-hover:scale-105 font-tilt-neon">
         <img
           src={imageUrl}
           alt={movie.title}
