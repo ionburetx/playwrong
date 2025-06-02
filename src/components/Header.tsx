@@ -83,14 +83,14 @@ const Header: FC = () => {
               )}
               <button 
                 onClick={handleAuthClick}
-                className="bg-white hover:bg-gray-200 text-black px-4 py-2 rounded-lg font-semibold transition"
+                className={`bg-transparent md:text-black hover:bg-gray-200 ${isGenrePage ? 'text-black md:text-white' : 'text-white md:text-black'} px-4 py-2 rounded-lg font-semibold transition`}
               >
                 {isAuthenticated ? <FaSignOutAlt className="ml-0.5"/> : <FaSignInAlt className="ml-0.5"/>}
               </button>
             </div>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-blue-500"
+            className={`md:hidden p-2 rounded-lg hover:bg-gray-200 ${isGenrePage ? 'text-black md:text-white' : 'text-white md:text-black'}`}
             aria-label="Toggle menu"
           >
             {isMenuOpen ? (
@@ -118,13 +118,13 @@ const Header: FC = () => {
             <div className="flex items-center space-x-4">
               {isAuthenticated && user && (
                 <div className="flex items-center space-x-3">
-                  <img 
+                  <Link to="/myprofile"><img 
                     src={user.picture} 
                     alt={user.name} 
                     className="w-8 h-8 rounded-full"
                   />
-                  <span className="hidden lg:inline">Hola, {user.name}</span>
-                  <Link to="/myprofile">Mi Perfil</Link>
+                  <span className="hidden">Hola, {user.name}</span>
+                  </Link>
                 </div>
               )}
               <button 
@@ -143,16 +143,16 @@ const Header: FC = () => {
 
       {/* Menú Móvil */}
       <div 
-        className={`md:hidden absolute w-full bg-blue-400 shadow-lg transition-all duration-300 ease-in-out ${
+        className={`md:hidden absolute w-full  shadow-lg transition-all duration-300 ease-in-out ${
           isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
-        }`}
+        } ${isGenrePage ? 'text-black bg-gradient-to-r from-transparent to-gray-100/70' : 'text-white bg-gradient-to-r from-transparent to-black/70'}`}
       >
         {/* Barra de búsqueda - Móvil */}
         <div className="md:hidden mt-2">
           <SearchBar onSearch={handleSearch} />
         </div>
 
-        <nav className="flex flex-col p-4 space-y-4">
+        <nav className="flex flex-col p-4 space-y-4 text-right">
           <Link 
             to="/genre/18" 
             className="hover:text-gray-200 py-2"
