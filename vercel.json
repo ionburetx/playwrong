@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/home", "has": [{ "type": "query", "key": "code" }], "destination": "/home" }
+    { "source": "/callback", "destination": "/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 } 

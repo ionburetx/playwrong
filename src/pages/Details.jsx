@@ -124,8 +124,12 @@ const Details = () => {
         )}
 
         {/* Overlays ahora también fixed para cubrir toda la pantalla */}
-        <div className={`fixed inset-0 w-full h-full z-10 bg-black/60 ${isPlaying ? 'bg-opacity-30' : ''}`} />
-        <div className={`fixed inset-0 w-full h-full z-20 bg-gradient-to-t from-gray-900/80 to-transparent ${isPlaying ? 'opacity-30' : ''}`} />
+        {!isPlaying && (
+          <>
+            <div className="fixed inset-0 w-full h-full z-10 bg-black/60" />
+            <div className="fixed inset-0 w-full h-full z-20 bg-gradient-to-t from-gray-900/80 to-transparent" />
+          </>
+        )}
 
         {/* Close Button */}
         <button
@@ -206,18 +210,20 @@ const Details = () => {
         </div>
 
         {/* Play/Pause Button */}
-        <div className="fixed right-8 bottom-8 z-[1001]">
-          <button 
-            className="bg-blue-400 hover:bg-[#04385d] transition-all duration-700 w-16 h-16 rounded-full flex items-center justify-center text-2xl"
-            onClick={togglePlay}
-          >
-            {isPlaying ? (
-              <FaPause className="ml-0"/>
-            ) : (
-              <FaPlay className="ml-1"/>
-            )}
-          </button>
-        </div>
+        {videoKey && (
+          <div className="fixed right-8 bottom-8 z-[1001] drop-shadow-[0_0_10px_rgba(96,165,250,0.5)]">
+            <button 
+              className="bg-blue-400 hover:bg-[#04385d] transition-all duration-700 w-16 h-16 rounded-full flex items-center justify-center text-2xl"
+              onClick={togglePlay}
+            >
+              {isPlaying ? (
+                <FaPause className="ml-0"/>
+              ) : (
+                <FaPlay className="ml-1"/>
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
