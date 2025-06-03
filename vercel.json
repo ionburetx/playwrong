@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/home", "has": [{ "type": "query", "key": "code" }], "destination": "/home" }
+  ]
+} 
