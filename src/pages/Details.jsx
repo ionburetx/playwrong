@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
@@ -166,12 +166,13 @@ const Details = () => {
 
                 <div className="flex flex-wrap gap-2">
                   {movie.genres?.map(genre => (
-                    <span 
+                    <Link 
                       key={genre.id}
-                      className="px-3 py-1 bg-blue-600 rounded-full text-sm"
+                      to={`/genre/${genre.id}`}
+                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 transition-colors rounded-full text-sm"
                     >
                       {genre.name}
-                    </span>
+                    </Link>
                   ))}
                 </div>
               </div>
